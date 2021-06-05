@@ -30,11 +30,45 @@
         ".json"
       ],
       "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "bcfb292a-1fe2-4232-a93e-6249433fb57c@f9941",
+      "displayName": "fruitBabbu",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 99,
+        "trimY": 19,
+        "width": 314,
+        "height": 474,
+        "rawWidth": 512,
+        "rawHeight": 512,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "bcfb292a-1fe2-4232-a93e-6249433fb57c@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.9",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
     }
   },
   "userData": {
     "hasAlpha": true,
-    "type": "texture",
-    "redirect": "bcfb292a-1fe2-4232-a93e-6249433fb57c@6c48a"
+    "type": "sprite-frame",
+    "redirect": "bcfb292a-1fe2-4232-a93e-6249433fb57c@f9941"
   }
 }

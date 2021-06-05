@@ -1,0 +1,46 @@
+{
+    "level" : [
+      {
+        "levelNumber" : 1,
+        "totalVirus" : 9,
+        "virusInfo" : {
+            "1": {
+                "type" : 1
+            },
+            "2": {
+                "type" : 2
+            },
+            "3": {
+                "type" : 3
+            },
+            "4": {
+                "type" : 4
+            },
+            "5": {
+                "type" : 1
+            },
+            "6": {
+                "type" : 2
+            },
+            "7": {
+                "type" : 3
+            },
+            "8": {
+                "type" : 4
+            },
+            "9": {
+                "type" : 1
+            }
+        }
+      },
+      {
+        "levelNumber" : 1,
+        "totalVirus" : 9,
+        "virusInfo" : {
+            "1": {
+                "type" : 1
+            }
+        }
+      }
+    ]
+}

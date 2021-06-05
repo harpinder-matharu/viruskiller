@@ -30,11 +30,45 @@
         ".json"
       ],
       "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "7c16f48b-088d-4488-afa2-66bb52d1108e@f9941",
+      "displayName": "fruitGrapes",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 3,
+        "trimY": 3,
+        "width": 370,
+        "height": 373,
+        "rawWidth": 376,
+        "rawHeight": 379,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "7c16f48b-088d-4488-afa2-66bb52d1108e@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.9",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
     }
   },
   "userData": {
     "hasAlpha": true,
-    "type": "texture",
-    "redirect": "7c16f48b-088d-4488-afa2-66bb52d1108e@6c48a"
+    "type": "sprite-frame",
+    "redirect": "7c16f48b-088d-4488-afa2-66bb52d1108e@f9941"
   }
 }
