@@ -734,6 +734,13 @@
       "__uuid__": "39438237-1a22-46d0-b2d1-5193b946cea8",
       "__expectedType__": "cc.Prefab"
     },
+    "arrowPrefab": {
+      "__uuid__": "acbd69b4-be8f-484c-b04f-0260160266a1",
+      "__expectedType__": "cc.Prefab"
+    },
+    "bg": {
+      "__id__": 19
+    },
     "rotator": {
       "__id__": 14
     },
