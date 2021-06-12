@@ -40,41 +40,21 @@ export function getLevelData(level:number) {
             scale : 0.2,
             virus : [
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 1,
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE3,
                     "index" : 2
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 3
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE4,
                     "index" : 4
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 5
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE5,
                     "index" : 6
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 7
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE6,
                     "index" : 8
                 },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 9
-                }
             ]
 
         }
@@ -89,10 +69,6 @@ export function getLevelData(level:number) {
                     "index" : 1,
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 2
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE2,
                     "index" : 3
                 },
@@ -101,20 +77,12 @@ export function getLevelData(level:number) {
                     "index" : 4
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 5
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE4,
                     "index" : 6
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE5,
                     "index" : 7
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 8
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE6,
@@ -150,10 +118,6 @@ export function getLevelData(level:number) {
                     "index" : 5
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 6
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE3,
                     "index" : 7
                 },
@@ -166,32 +130,8 @@ export function getLevelData(level:number) {
                     "index" : 9
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 10
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 11
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 12
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE3,
                     "index" : 13
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 14
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 15
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 16
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE3,
@@ -204,10 +144,6 @@ export function getLevelData(level:number) {
                 {
                     "type" : VIRUS_TYPE.TYPE1,
                     "index" : 19
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 20
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE4,
@@ -243,10 +179,6 @@ export function getLevelData(level:number) {
                     "index" : 1,
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 2
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE2,
                     "index" : 3
                 },
@@ -255,20 +187,12 @@ export function getLevelData(level:number) {
                     "index" : 4
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 5
-                },
-                {
                     "type" : VIRUS_TYPE.TYPE4,
                     "index" : 6
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE5,
                     "index" : 7
-                },
-                {
-                    "type" : VIRUS_TYPE.NONE,
-                    "index" : 8
                 },
                 {
                     "type" : VIRUS_TYPE.TYPE6,
@@ -283,7 +207,9 @@ export function getLevelData(level:number) {
 export class visurInfo
 {
   public type           : VIRUS_TYPE | undefined;
-  public spriteFrame    : SpriteFrame | undefined | any;
+  public spriteFrameFull    : SpriteFrame | undefined | any;
+  public spriteFrameLeft    : SpriteFrame | undefined | any;
+  public spriteFrameRight    : SpriteFrame | undefined | any;
 }
 
 export class virus

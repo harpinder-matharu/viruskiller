@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label } from 'cc';
+import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI } from 'cc';
 
 const { ccclass, property } = _decorator;
 import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower} from '../scripts/virusData'
@@ -24,7 +24,7 @@ export class GamePlay extends Component {
     virusArray : Array<virus> = new Array(); //container 
     arrow:Node = new Node();
     virusInfo : Array<visurInfo> = new Array();
-
+    
     @property(Prefab)
     virusPrefab = new Prefab();
 
@@ -44,10 +44,19 @@ export class GamePlay extends Component {
     bg = new Sprite();
 
     @property(Sprite)
+    bonfire = new Sprite();
+
+    @property(Sprite)
     rotator = new Sprite();
 
     @property(SpriteFrame)
-    virusFrames = [];
+    virusFramesFull = [];
+
+    @property(SpriteFrame)
+    virusFramesHalfLeft = [];
+
+    @property(SpriteFrame)
+    virusFramesHalfRight = [];
 
     @property({type : Enum(VIRUS_TYPE)})
     virusFrameType   = [];
@@ -96,12 +105,21 @@ export class GamePlay extends Component {
         this.arrow.position.x = 0;
     }
     setVirusInfo(){
-        this.virusFrames.forEach((itemFrame,index,aar) =>{
+        // this.virusFramesFull.forEach((itemFrame,index,aar) =>{
+        //     this.virusInfo.push({ 
+        //         type            : this.virusFrameType[index],
+        //         spriteFrame     : itemFrame
+        //     });
+        // });
+
+        for(let i=0;i<this.virusFramesFull.length;i++){
             this.virusInfo.push({ 
-                type            : this.virusFrameType[index],
-                spriteFrame     : itemFrame
+                type            : this.virusFrameType[i],
+                spriteFrameFull     : this.virusFramesFull[i],
+                spriteFrameLeft    : this.virusFramesHalfLeft[i],
+                spriteFrameRight   : this.virusFramesHalfRight[i]
             });
-        });
+        }
     }
     setUpViruses(){
     
@@ -115,12 +133,7 @@ export class GamePlay extends Component {
         //size of virus
         let scale = this.rotator.getComponent(UITransform)?.contentSize.height!  * this.levelData.scale/this.virus.getComponent(UITransform)?.contentSize.height!;
 
-        
-        for(let j = 1; j <= numRowColumn*numRowColumn; j++){
-            
-            if(this.levelData.virus[j-1].type ===VIRUS_TYPE.NONE){
-                continue;
-            }
+        this.levelData.virus.forEach((virus:any,index:number,arr:any) => {
             this.virus = instantiate(this.virusPrefab); 
             let dot = instantiate(this.dotPrefab);
             tween(this.virus)
@@ -133,20 +146,20 @@ export class GamePlay extends Component {
                 .by(1, {  angle : -180})
             ).start();
             this.virusArray.push({
-                type : this.levelData.virus[j-1].type,
+                type : virus.type,
                 virus : this.virus,
-                power : getVirusPower(this.levelData.virus[j-1].type)
+                power : getVirusPower(virus.type)
                 });
-            this.virus.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === this.levelData.virus[j-1].type)?.spriteFrame;
+            this.virus.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === virus.type)?.spriteFrameFull;
             
-            let virusPosition = new Vec3(diffBtwnViruses * this.getX(j,numRowColumn), diffBtwnViruses * this.getY(j,numRowColumn),0);
+            let virusPosition = new Vec3(diffBtwnViruses * this.getX(virus.index,numRowColumn), diffBtwnViruses * this.getY(virus.index,numRowColumn),0);
 
             this.virus.position = virusPosition;
             dot.position = virusPosition;
             this.rotator.node.addChild(dot);
             this.rotator.node.addChild(this.virus);
             this.virus.setScale(new Vec3(scale,scale,1));
-        }
+        });
     }
 
     updateLevelNum(){
@@ -205,6 +218,7 @@ export class GamePlay extends Component {
             this.virusArray.forEach((virusData,index,aar) =>{
                 if (this.checkArrowIntersectWith(virusData.virus)){
                     console.log("Collision");
+                    this.breakAndBurnVirus(virusData);
                     virusData.virus.active = false;
                     aar.splice(index, 1);
                 }
@@ -217,6 +231,48 @@ export class GamePlay extends Component {
             this.level++
             this.startLevel(this.level);
         }
+    }
+
+    breakAndBurnVirus(virusData:virus){
+        
+        let scale = this.rotator.getComponent(UITransform)?.contentSize.height!  * this.levelData.scale/virusData.virus.getComponent(UITransform)?.contentSize.height!;
+
+        let Position = this.rotator.getComponent(UITransform)?.convertToWorldSpaceAR(virusData.virus.position);
+        Position = this.bg.getComponent(UITransform)?.convertToNodeSpaceAR(Position!);
+
+        let virusLeft  = instantiate(this.virusPrefab);
+        let virusRight = instantiate(this.virusPrefab);  
+
+        virusLeft.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === virusData.type)?.spriteFrameLeft;
+        virusRight.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === virusData.type)?.spriteFrameRight;
+
+        virusLeft.setScale(new Vec3(scale,scale,1));
+        virusRight.setScale(new Vec3(scale,scale,1));
+
+        virusLeft.position.y = Position!.y;
+        virusRight.position.y = Position!.y;
+
+        virusLeft.position.x = Position!.x -50;
+        virusRight.position.x = Position!.x + 50;
+
+        this.bg.node.addChild(virusLeft);
+        this.bg.node.addChild(virusRight);
+
+        tween(virusLeft)
+        .to(1,{position:this.bonfire.node.position, scale : new Vec3(0,0,0)})
+        .call(()=>{
+            virusLeft.removeFromParent();
+        })
+        .start();
+
+        tween(virusRight)
+        .to(1,{position:this.bonfire.node.position, scale : new Vec3(0,0,0)})
+        .call(()=>{
+            virusRight.removeFromParent();
+        })
+        .start();
+
+        
     }
 
     getY(index:number,sizeN:number){
