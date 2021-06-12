@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2 } from 'cc';
+import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label } from 'cc';
 
 const { ccclass, property } = _decorator;
 import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower} from '../scripts/virusData'
@@ -10,6 +10,9 @@ export class GamePlay extends Component {
     //touch points
     arrowTouchBeganPoint:any;
     canAccessArrow :Boolean = false;
+
+    level:number = 0;
+    maxLevel:number = 4;
 
     injectionsLeft:number = 0;
     xDifference:number = 0;
@@ -22,14 +25,20 @@ export class GamePlay extends Component {
     arrow:Node = new Node();
     virusInfo : Array<visurInfo> = new Array();
 
-    @property(Node)
-    injectionCount = new Node();
-
     @property(Prefab)
     virusPrefab = new Prefab();
 
     @property(Prefab)
+    dotPrefab = new Prefab();
+
+    @property(Prefab)
     arrowPrefab = new Prefab();
+
+    @property(Label)
+    levelNum = new Label();
+
+    @property(Node)
+    injectionCount = new Node();
 
     @property(Sprite)
     bg = new Sprite();
@@ -44,15 +53,35 @@ export class GamePlay extends Component {
     virusFrameType   = [];
 
     start () {
+        this.startLevel(1);
+        // this.schedule(this.checkCollision, 0.001);
+        // this.unschedule(this.checkCollision);
+    }
+
+    startLevel(levelNum:number){
+        if(this.maxLevel < levelNum){
+            console.log("Maximum Level reached");
+            return;
+        }
+        this.level = levelNum;
         this.touchEvents();
-        this.levelData = getLevelData(3);
+        this.updateLevelData();
+        this.updateLevelNum();
         this.setVirusInfo();
         this.setUpViruses();
         this.setUpArrow();
         this.rotateRotator();
         this.setInjectionCount();
-        // this.schedule(this.checkCollision, 0.001);
-        // this.unschedule(this.checkCollision);
+    }
+
+    resetScene(){
+        this.rotator.node.removeAllChildren();
+        this.injectionCount.removeAllChildren();
+        this.arrow.removeFromParent();
+    }
+
+    updateLevelData(){
+        this.levelData = getLevelData(this.level);
     }
     setUpArrow(){
         this.arrow = instantiate(this.arrowPrefab);
@@ -93,6 +122,7 @@ export class GamePlay extends Component {
                 continue;
             }
             this.virus = instantiate(this.virusPrefab); 
+            let dot = instantiate(this.dotPrefab);
             tween(this.virus)
             .repeatForever(
                 tween()
@@ -109,12 +139,19 @@ export class GamePlay extends Component {
                 });
             this.virus.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === this.levelData.virus[j-1].type)?.spriteFrame;
             
-            this.virus.position = new Vec3(diffBtwnViruses * this.getX(j,numRowColumn), diffBtwnViruses * this.getY(j,numRowColumn),0);
+            let virusPosition = new Vec3(diffBtwnViruses * this.getX(j,numRowColumn), diffBtwnViruses * this.getY(j,numRowColumn),0);
+
+            this.virus.position = virusPosition;
+            dot.position = virusPosition;
+            this.rotator.node.addChild(dot);
             this.rotator.node.addChild(this.virus);
             this.virus.setScale(new Vec3(scale,scale,1));
         }
     }
 
+    updateLevelNum(){
+        this.levelNum.string = String("LEVEL"+this.level);
+    }
     setInjectionCount(){
         let spareArrow = instantiate(this.arrowPrefab);
         let scale = this.rotator.getComponent(UITransform)?.contentSize.width!  * 0.09/spareArrow.getComponent(UITransform)?.contentSize.width!;
@@ -176,6 +213,9 @@ export class GamePlay extends Component {
         else{
             console.log("Game Over");
             this.unschedule(this.checkCollision);
+            this.resetScene();
+            this.level++
+            this.startLevel(this.level);
         }
     }
 
@@ -258,12 +298,12 @@ export class GamePlay extends Component {
         var eventLocation = event.getUILocation();
         if (this.canAccessArrow)
         {
-            let touchPointOnBg = this.bg!.getComponent(UITransform)?.convertToNodeSpaceAR(v3(eventLocation.x, eventLocation.y,0));
-            this.xDifference = this.arrow.position.x -  touchPointOnBg!.x;
-            this.yDifference = this.arrow.position.y - touchPointOnBg!.y;
-            let size = Math.abs(this.xDifference)>Math.abs(this.yDifference) ? Math.abs(this.xDifference):Math.abs(this.yDifference);
-            let angle = Math.atan2(this.xDifference,this.yDifference)* 180 / Math.PI;
-            this.arrow.angle = angle*-1;
+            // let touchPointOnBg = this.bg!.getComponent(UITransform)?.convertToNodeSpaceAR(v3(eventLocation.x, eventLocation.y,0));
+            // this.xDifference = this.arrow.position.x -  touchPointOnBg!.x;
+            // this.yDifference = this.arrow.position.y - touchPointOnBg!.y;
+            // let size = Math.abs(this.xDifference)>Math.abs(this.yDifference) ? Math.abs(this.xDifference):Math.abs(this.yDifference);
+            // let angle = Math.atan2(this.xDifference,this.yDifference)* 180 / Math.PI;
+            // this.arrow.angle = angle*-1;
         }
     }
     itemTouchEndCallback(event: { getUILocation: () => any; }){

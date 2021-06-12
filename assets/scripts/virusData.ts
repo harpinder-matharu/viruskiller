@@ -34,20 +34,21 @@ export function getVirusPower(virusType:VIRUS_TYPE) {
 export function getLevelData(level:number) {
     switch(level){
         case 1:return {
-            levelNumber : 1,
+            levelNumber : 3,
             rowXCol : 3,
             injectionCount : 9,
+            scale : 0.2,
             virus : [
                 {
-                    "type" : VIRUS_TYPE.TYPE1,
+                    "type" : VIRUS_TYPE.NONE,
                     "index" : 1,
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
+                    "type" : VIRUS_TYPE.TYPE3,
                     "index" : 2
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE3,
+                    "type" : VIRUS_TYPE.NONE,
                     "index" : 3
                 },
                 {
@@ -59,19 +60,19 @@ export function getLevelData(level:number) {
                     "index" : 5
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE2,
+                    "type" : VIRUS_TYPE.TYPE5,
                     "index" : 6
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE3,
+                    "type" : VIRUS_TYPE.NONE,
                     "index" : 7
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
+                    "type" : VIRUS_TYPE.TYPE6,
                     "index" : 8
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE1,
+                    "type" : VIRUS_TYPE.NONE,
                     "index" : 9
                 }
             ]
@@ -79,8 +80,54 @@ export function getLevelData(level:number) {
         }
         case 2:return {
             levelNumber : 1,
-            rowXCol : 5,
+            rowXCol : 3,
             injectionCount : 9,
+            scale : 0.18,
+            virus : [
+                {
+                    "type" : VIRUS_TYPE.TYPE1,
+                    "index" : 1,
+                },
+                {
+                    "type" : VIRUS_TYPE.NONE,
+                    "index" : 2
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE2,
+                    "index" : 3
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE3,
+                    "index" : 4
+                },
+                {
+                    "type" : VIRUS_TYPE.NONE,
+                    "index" : 5
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE4,
+                    "index" : 6
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE5,
+                    "index" : 7
+                },
+                {
+                    "type" : VIRUS_TYPE.NONE,
+                    "index" : 8
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE6,
+                    "index" : 9
+                }
+            ]
+
+        }
+        case 3:return {
+            levelNumber : 1,
+            rowXCol : 5,
+            injectionCount : 15,
+            scale : 0.12,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE1,
@@ -185,26 +232,26 @@ export function getLevelData(level:number) {
             ]
 
         }
-        case 3:return {
-            levelNumber : 3,
+        case 4:return {
+            levelNumber : 4,
             rowXCol : 3,
             injectionCount : 9,
             scale : 0.2,
             virus : [
                 {
-                    "type" : VIRUS_TYPE.NONE,
+                    "type" : VIRUS_TYPE.TYPE1,
                     "index" : 1,
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE3,
+                    "type" : VIRUS_TYPE.NONE,
                     "index" : 2
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
+                    "type" : VIRUS_TYPE.TYPE2,
                     "index" : 3
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE4,
+                    "type" : VIRUS_TYPE.TYPE3,
                     "index" : 4
                 },
                 {
@@ -212,19 +259,19 @@ export function getLevelData(level:number) {
                     "index" : 5
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE5,
+                    "type" : VIRUS_TYPE.TYPE4,
                     "index" : 6
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
+                    "type" : VIRUS_TYPE.TYPE5,
                     "index" : 7
                 },
                 {
-                    "type" : VIRUS_TYPE.TYPE6,
+                    "type" : VIRUS_TYPE.NONE,
                     "index" : 8
                 },
                 {
-                    "type" : VIRUS_TYPE.NONE,
+                    "type" : VIRUS_TYPE.TYPE6,
                     "index" : 9
                 }
             ]
