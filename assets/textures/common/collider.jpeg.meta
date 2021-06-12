@@ -2,16 +2,16 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "7c16f48b-088d-4488-afa2-66bb52d1108e",
+  "uuid": "d677adbc-e8a9-4896-b639-607777e58811",
   "files": [
-    ".png",
+    ".jpeg",
     ".json"
   ],
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "7c16f48b-088d-4488-afa2-66bb52d1108e@6c48a",
-      "displayName": "fruitGrapes",
+      "uuid": "d677adbc-e8a9-4896-b639-607777e58811@6c48a",
+      "displayName": "collider",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "7c16f48b-088d-4488-afa2-66bb52d1108e"
+        "imageUuidOrDatabaseUri": "d677adbc-e8a9-4896-b639-607777e58811"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,8 +33,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "7c16f48b-088d-4488-afa2-66bb52d1108e@f9941",
-      "displayName": "fruitGrapes",
+      "uuid": "d677adbc-e8a9-4896-b639-607777e58811@f9941",
+      "displayName": "collider",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -43,19 +43,19 @@
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 3,
-        "trimY": 3,
-        "width": 370,
-        "height": 373,
-        "rawWidth": 376,
-        "rawHeight": 379,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 1888,
+        "height": 1062,
+        "rawWidth": 1888,
+        "rawHeight": 1062,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "7c16f48b-088d-4488-afa2-66bb52d1108e@6c48a",
+        "imageUuidOrDatabaseUri": "d677adbc-e8a9-4896-b639-607777e58811@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -67,8 +67,8 @@
     }
   },
   "userData": {
-    "hasAlpha": true,
+    "hasAlpha": false,
     "type": "sprite-frame",
-    "redirect": "7c16f48b-088d-4488-afa2-66bb52d1108e@f9941"
+    "redirect": "d677adbc-e8a9-4896-b639-607777e58811@f9941"
   }
 }
