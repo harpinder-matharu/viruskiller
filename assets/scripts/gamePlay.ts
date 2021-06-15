@@ -49,6 +49,9 @@ export class GamePlay extends Component {
     @property(Sprite)
     rotator = new Sprite();
 
+    @property(Sprite)
+    gameOverLayer = new Sprite();
+
     @property(SpriteFrame)
     virusFramesFull = [];
 
@@ -62,6 +65,7 @@ export class GamePlay extends Component {
     virusFrameType   = [];
 
     start () {
+        this.gameOverLayer.node.active = false;
         this.startLevel(1);
         // this.schedule(this.checkCollision, 0.001);
         // this.unschedule(this.checkCollision);
@@ -78,7 +82,7 @@ export class GamePlay extends Component {
         this.updateLevelNum();
         this.setVirusInfo();
         this.setUpViruses();
-        this.setUpArrow();
+        this.setUpInitialSyringe();
         this.rotateRotator();
         this.setInjectionCount();
     }
@@ -92,7 +96,7 @@ export class GamePlay extends Component {
     updateLevelData(){
         this.levelData = getLevelData(this.level);
     }
-    setUpArrow(){
+    setUpInitialSyringe(){
         this.arrow = instantiate(this.arrowPrefab);
         let scale = this.rotator.getComponent(UITransform)?.contentSize.width!  * 0.12/this.arrow.getComponent(UITransform)?.contentSize.width!;
         this.arrow.setScale(new Vec3(scale,scale,scale));
@@ -225,12 +229,24 @@ export class GamePlay extends Component {
             });
         }
         else{
-            console.log("Game Over");
+            console.log("Level Complete, Move to next Level");
             this.unschedule(this.checkCollision);
             this.resetScene();
             this.level++
             this.startLevel(this.level);
         }
+    }
+
+    updateGameOverLayer(){
+        
+        
+        let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
+        levelNumber.string = String("LEVEL"+this.level);
+
+        let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
+        scoreValue.string = String(100);
+
+        this.gameOverLayer.node.active = true;
     }
 
     breakAndBurnVirus(virusData:virus){
@@ -377,11 +393,29 @@ export class GamePlay extends Component {
                 if(this.injectionsLeft>0){
                     this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
                     this.resetArrow();
+                }else{
+                    // gameOver
+                    this.updateGameOverLayer();
                 }
                 this.unschedule(this.checkCollision);
             })
             .start();
             this.canAccessArrow = false;
         }
+    }
+
+    onReplay(){
+        this.gameOverLayer.node.active = false;
+        this.resetScene();
+        this.startLevel(this.level);
+    }
+    onGoToHome(){
+        director.loadScene("landingScene");
+    }
+    onRevive(){
+        this.gameOverLayer.node.active = false;
+        this.injectionCount.removeAllChildren();
+        this.setUpInitialSyringe();
+        this.setInjectionCount();
     }
 }
