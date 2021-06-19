@@ -1,4 +1,4 @@
-import { SpriteFrame} from "cc";
+import { Prefab, SpriteFrame} from "cc";
 
 export enum VIRUS_TYPE{
     NONE = 0,
@@ -210,6 +210,7 @@ export class visurInfo
   public spriteFrameFull    : SpriteFrame | undefined | any;
   public spriteFrameLeft    : SpriteFrame | undefined | any;
   public spriteFrameRight    : SpriteFrame | undefined | any;
+  public prefabAnimation          : Prefab | any;
 }
 
 export class virus
