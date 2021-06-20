@@ -30,11 +30,45 @@
         ".json"
       ],
       "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "024e96a9-420d-4c65-8108-c114bc56aa41@f9941",
+      "displayName": "virus-icon",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "none",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 90,
+        "height": 90,
+        "rawWidth": 90,
+        "rawHeight": 90,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "024e96a9-420d-4c65-8108-c114bc56aa41@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.9",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
     }
   },
   "userData": {
     "hasAlpha": true,
-    "type": "texture",
-    "redirect": "024e96a9-420d-4c65-8108-c114bc56aa41@6c48a"
+    "type": "sprite-frame",
+    "redirect": "024e96a9-420d-4c65-8108-c114bc56aa41@f9941"
   }
 }

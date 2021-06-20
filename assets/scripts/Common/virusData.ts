@@ -30,6 +30,34 @@ export function getVirusPower(virusType:VIRUS_TYPE) {
     }
     return power;
 }
+
+export function getVirusPoints(virusType:VIRUS_TYPE) {
+    let points:number = 0;
+    switch (virusType){
+        case VIRUS_TYPE.TYPE1 :
+            points = 5;
+            break;
+        case VIRUS_TYPE.TYPE2 :
+            points = 10;
+            break;
+        case VIRUS_TYPE.TYPE3 :
+            points = 15;
+            break;
+        case VIRUS_TYPE.TYPE4 :
+            points = 20;
+            break;
+        case VIRUS_TYPE.TYPE5 :
+            points = 25;
+            break;
+        case VIRUS_TYPE.TYPE6 :
+            points = 30;
+            break;
+        default :
+            break;
+    }
+    return points;
+}
+
 //Row columns should be an odd number and n*n
 export function getLevelData(level:number) {
     switch(level){

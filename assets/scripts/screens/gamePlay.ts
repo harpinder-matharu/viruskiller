@@ -1,8 +1,9 @@
 
-import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation } from 'cc';
-
+import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation, AudioClip, AudioSource } from 'cc';
+import {gameManager , IN_GAME_CURR_OP, SCENE_TYPE, SYRINGE_TYPE} from '../Common/gameManager';
 const { ccclass, property } = _decorator;
-import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower} from '../scripts/virusData'
+import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints} from '../Common/virusData'
+import { SoundManager } from '../Common/SoundManager';
 
 @ccclass('GamePlay')
 export class GamePlay extends Component {
@@ -13,6 +14,7 @@ export class GamePlay extends Component {
 
     level:number = 0;
     maxLevel:number = 4;
+    totalLevelPoints:number = 0;
 
     injectionsLeft:number = 0;
     xDifference:number = 0;
@@ -36,6 +38,9 @@ export class GamePlay extends Component {
 
     @property(Label)
     levelNum = new Label();
+
+    @property(Label)
+    levelScore = new Label();
 
     @property(Node)
     injectionCount = new Node();
@@ -70,11 +75,20 @@ export class GamePlay extends Component {
     @property(Sprite)
     fireAnimation = new Sprite();
 
+    @property(Sprite)
+    progressbar:Sprite = null!;
+
+    @property(AudioClip)
+    fire : AudioClip = null!;
+    @property(AudioClip)
+    blast : AudioClip = null!;
+    @property(AudioClip)
+    syringeFly : AudioClip = null!;
+
     start () {
+        SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.gameOverLayer.node.active = false;
         this.startLevel(1);
-        // this.schedule(this.checkCollision, 0.001);
-        // this.unschedule(this.checkCollision);
     }
 
     startLevel(levelNum:number){
@@ -91,6 +105,8 @@ export class GamePlay extends Component {
         this.setUpInitialSyringe();
         this.rotateRotator();
         this.setInjectionCount();
+
+        console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
     resetScene(){
@@ -110,18 +126,12 @@ export class GamePlay extends Component {
         this.arrow.position.x = 0;
         this.bg.node.addChild(this.arrow);
     }
-    resetArrow(){
+    resetSyringePosition(){
         this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
         this.arrow.position.x = 0;
     }
     setVirusInfo(){
-        // this.virusFramesFull.forEach((itemFrame,index,aar) =>{
-        //     this.virusInfo.push({ 
-        //         type            : this.virusFrameType[index],
-        //         spriteFrame     : itemFrame
-        //     });
-        // });
-
+        
         for(let i=0;i<this.virusFramesFull.length;i++){
             this.virusInfo.push({ 
                 type            : this.virusFrameType[i],
@@ -143,8 +153,12 @@ export class GamePlay extends Component {
 
         //size of virus
         let scale = this.rotator.getComponent(UITransform)?.contentSize.height!  * this.levelData.scale/this.virus.getComponent(UITransform)?.contentSize.height!;
-
+        this.totalLevelPoints = 0;
+        this.progressbar.fillRange = 0;
+        this.levelScore.string = "0";
         this.levelData.virus.forEach((virus:any,index:number,arr:any) => {
+
+            this.totalLevelPoints = this.totalLevelPoints + getVirusPoints(virus.type);
             this.virus = instantiate(this.virusPrefab); 
             let dot = instantiate(this.dotPrefab);
             tween(this.virus)
@@ -171,6 +185,7 @@ export class GamePlay extends Component {
             this.rotator.node.addChild(this.virus);
             this.virus.setScale(new Vec3(scale,scale,1));
         });
+        console.log("Points "+this.totalLevelPoints);
     }
 
     updateLevelNum(){
@@ -235,6 +250,7 @@ export class GamePlay extends Component {
             this.virusArray.forEach((virusData,index,aar) =>{
                 if (this.checkArrowIntersectWith(virusData.virus)){
                     console.log("Collision");
+                    SoundManager.getInstance().playSoundEffect(this.blast);
                     this.breakAndBurnVirus(virusData);
                     virusData.virus.active = false;
                     aar.splice(index, 1);
@@ -263,6 +279,11 @@ export class GamePlay extends Component {
     }
 
     breakAndBurnVirus(virusData:virus){
+
+        let point:number = getVirusPoints(virusData.type!)
+        
+        this.levelScore.string = String(parseInt(this.levelScore.string) + point);
+        this.progressbar.fillRange = this.progressbar.fillRange+ point/this.totalLevelPoints;
         
 
         let scale = this.rotator.getComponent(UITransform)?.contentSize.height!  * this.levelData.scale/virusData.virus.getComponent(UITransform)?.contentSize.height!;
@@ -306,7 +327,7 @@ export class GamePlay extends Component {
         tween(virusBlastAnimation)
         .to(0.5,{position:this.bonfire.node.position})
         .call(()=>{
-            
+            SoundManager.getInstance().playSoundEffect(this.fire);
         })
         .delay(0)
         .call(()=>{
@@ -415,17 +436,17 @@ export class GamePlay extends Component {
         var eventLocation = event.getUILocation();
         if (this.canAccessArrow)
         {
-            // this.arrow.getComponent(UITransform)!.setAnchorPoint(new Vec2(0.5,1));
             tween(this.arrow)
             .call(()=>{
                 this.schedule(this.checkCollision, 0.001);
+                SoundManager.getInstance().playSoundEffect(this.syringeFly);
             })
-            .to(0.6, { position:new Vec3(0,600)/*Vec3(this.xDifference*20,this.yDifference * 20,0)*/})
+            .to(0.6, { position:new Vec3(0,1000)/*Vec3(this.xDifference*20,this.yDifference * 20,0)*/})
             .call(()=>{
                 this.injectionsLeft--;
                 if(this.injectionsLeft>0){
                     this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
-                    this.resetArrow();
+                    this.resetSyringePosition();
                 }else{
                     // gameOver
                     this.updateGameOverLayer();
@@ -448,6 +469,7 @@ export class GamePlay extends Component {
     onRevive(){
         this.gameOverLayer.node.active = false;
         this.injectionCount.removeAllChildren();
+        this.arrow.removeFromParent();
         this.setUpInitialSyringe();
         this.setInjectionCount();
     }
