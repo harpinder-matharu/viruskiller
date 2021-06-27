@@ -7,12 +7,16 @@ export enum SCENE_TYPE {
 }
 
 export enum SYRINGE_TYPE {
-    NONE = 0,
+    NONE  = 0,
     TYPE1 = 1,
     TYPE2 = 2,
     TYPE3 = 3,
     TYPE4 = 4,
     TYPE5 = 5,
+    TYPE6 = 6,
+    TYPE7 = 7,
+    TYPE8 = 8,
+    TYPE9 = 9
 }
 
 export enum IN_GAME_CURR_OP{
@@ -24,7 +28,7 @@ export enum IN_GAME_CURR_OP{
 export class gameManager{
 
     sceneType: SCENE_TYPE = SCENE_TYPE.NONE;
-    syringeType: SYRINGE_TYPE = SYRINGE_TYPE.NONE;
+    syringeType: SYRINGE_TYPE = SYRINGE_TYPE.TYPE1;
     coins : number = 0;
 
     gameManager(){

@@ -2,7 +2,7 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "2cb61131-0330-476c-b1a3-39dcdce7be2d",
+  "uuid": "fa637cd7-0a33-4e98-8c96-85836d52f491",
   "files": [
     ".png",
     ".json"
@@ -10,7 +10,7 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "2cb61131-0330-476c-b1a3-39dcdce7be2d@6c48a",
+      "uuid": "fa637cd7-0a33-4e98-8c96-85836d52f491@6c48a",
       "displayName": "virus7",
       "id": "6c48a",
       "name": "texture",
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "2cb61131-0330-476c-b1a3-39dcdce7be2d"
+        "imageUuidOrDatabaseUri": "fa637cd7-0a33-4e98-8c96-85836d52f491"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,7 +33,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "2cb61131-0330-476c-b1a3-39dcdce7be2d@f9941",
+      "uuid": "fa637cd7-0a33-4e98-8c96-85836d52f491@f9941",
       "displayName": "virus7",
       "id": "f9941",
       "name": "spriteFrame",
@@ -42,20 +42,20 @@
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
-        "offsetY": -0.5,
-        "trimX": 4,
-        "trimY": 5,
+        "offsetY": 0.5,
+        "trimX": 175,
+        "trimY": 175,
         "width": 100,
         "height": 99,
-        "rawWidth": 108,
-        "rawHeight": 108,
+        "rawWidth": 450,
+        "rawHeight": 450,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "2cb61131-0330-476c-b1a3-39dcdce7be2d@6c48a",
+        "imageUuidOrDatabaseUri": "fa637cd7-0a33-4e98-8c96-85836d52f491@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "hasAlpha": true,
     "type": "sprite-frame",
-    "redirect": "2cb61131-0330-476c-b1a3-39dcdce7be2d@f9941"
+    "redirect": "fa637cd7-0a33-4e98-8c96-85836d52f491@f9941"
   }
 }

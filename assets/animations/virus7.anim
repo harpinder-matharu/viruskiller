@@ -1,0 +1,71 @@
+[
+  {
+    "__type__": "cc.AnimationClip",
+    "_name": "virus7",
+    "_objFlags": 0,
+    "_native": "",
+    "sample": 7,
+    "speed": 1,
+    "wrapMode": 1,
+    "events": [],
+    "enableTrsBlending": false,
+    "_duration": 0.8571428571428571,
+    "_keys": [
+      [
+        0,
+        0.14285714285714285,
+        0.2857142857142857,
+        0.42857142857142855,
+        0.5714285714285714,
+        0.7142857142857143
+      ]
+    ],
+    "_stepness": 0,
+    "_curves": [
+      {
+        "modifiers": [
+          {
+            "__id__": 1
+          },
+          "spriteFrame"
+        ],
+        "data": {
+          "keys": 0,
+          "values": [
+            {
+              "__uuid__": "06252b26-d910-44ae-bc41-8a1791ea59b6@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "f48781ca-6f8a-43ee-b1e4-06840b3f4fe4@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "9a5cc2d3-5492-4d26-af46-438a29132eff@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "cb4d2d57-4231-4423-9000-a62b9bfec81f@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "8ef0a6cb-19e6-4cb5-9669-7f8f4bcb3ed7@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "cda91e90-f5e6-4da0-a1da-fbde2195f9e5@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            }
+          ],
+          "easingMethods": {}
+        }
+      }
+    ],
+    "_commonTargets": [],
+    "_hash": 1792593774
+  },
+  {
+    "__type__": "cc.animation.ComponentPath",
+    "component": "cc.Sprite"
+  }
+]

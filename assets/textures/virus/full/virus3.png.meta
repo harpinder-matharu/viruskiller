@@ -2,7 +2,7 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "4db5734b-9e53-4151-b498-2b318fab2f8b",
+  "uuid": "312c340c-e506-42d6-928b-b748f2995c92",
   "files": [
     ".png",
     ".json"
@@ -10,7 +10,7 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "4db5734b-9e53-4151-b498-2b318fab2f8b@6c48a",
+      "uuid": "312c340c-e506-42d6-928b-b748f2995c92@6c48a",
       "displayName": "virus3",
       "id": "6c48a",
       "name": "texture",
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "4db5734b-9e53-4151-b498-2b318fab2f8b"
+        "imageUuidOrDatabaseUri": "312c340c-e506-42d6-928b-b748f2995c92"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,7 +33,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "4db5734b-9e53-4151-b498-2b318fab2f8b@f9941",
+      "uuid": "312c340c-e506-42d6-928b-b748f2995c92@f9941",
       "displayName": "virus3",
       "id": "f9941",
       "name": "spriteFrame",
@@ -42,20 +42,20 @@
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
-        "offsetY": 0,
-        "trimX": 0,
-        "trimY": 0,
-        "width": 167,
-        "height": 167,
-        "rawWidth": 167,
-        "rawHeight": 167,
+        "offsetY": 0.5,
+        "trimX": 174,
+        "trimY": 175,
+        "width": 102,
+        "height": 99,
+        "rawWidth": 450,
+        "rawHeight": 450,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "4db5734b-9e53-4151-b498-2b318fab2f8b@6c48a",
+        "imageUuidOrDatabaseUri": "312c340c-e506-42d6-928b-b748f2995c92@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "hasAlpha": true,
     "type": "sprite-frame",
-    "redirect": "4db5734b-9e53-4151-b498-2b318fab2f8b@f9941"
+    "redirect": "312c340c-e506-42d6-928b-b748f2995c92@f9941"
   }
 }

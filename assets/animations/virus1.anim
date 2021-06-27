@@ -34,10 +34,6 @@
           "keys": 0,
           "values": [
             {
-              "__uuid__": "f01d4e07-305f-43a7-b205-3b816999e2a3@f9941",
-              "__expectedType__": "cc.SpriteFrame"
-            },
-            {
               "__uuid__": "5ae3d94d-791e-4330-8432-993166c8ebbb@f9941",
               "__expectedType__": "cc.SpriteFrame"
             },
@@ -60,6 +56,10 @@
             {
               "__uuid__": "eee23239-7a14-4ecd-ada1-25bfe443b013@f9941",
               "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "f01d4e07-305f-43a7-b205-3b816999e2a3@f9941",
+              "__expectedType__": "cc.SpriteFrame"
             }
           ],
           "easingMethods": {}
@@ -67,7 +67,7 @@
       }
     ],
     "_commonTargets": [],
-    "_hash": 1420661909
+    "_hash": 2224469089
   },
   {
     "__type__": "cc.animation.ComponentPath",

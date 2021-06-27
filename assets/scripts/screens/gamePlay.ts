@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation, AudioClip, AudioSource } from 'cc';
+import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation, AudioClip, AudioSource, AnimationClip, Button } from 'cc';
 import {gameManager , IN_GAME_CURR_OP, SCENE_TYPE, SYRINGE_TYPE} from '../Common/gameManager';
 const { ccclass, property } = _decorator;
 import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints} from '../Common/virusData'
@@ -13,7 +13,7 @@ export class GamePlay extends Component {
     canAccessArrow :Boolean = false;
 
     level:number = 0;
-    maxLevel:number = 4;
+    maxLevel:number = 6;
     totalLevelPoints:number = 0;
 
     injectionsLeft:number = 0;
@@ -26,6 +26,7 @@ export class GamePlay extends Component {
     virusArray : Array<virus> = new Array(); //container 
     arrow:Node = new Node();
     virusInfo : Array<visurInfo> = new Array();
+    unUsedCoins : Array<Node> = new Array();
     
     @property(Prefab)
     virusPrefab = new Prefab();
@@ -57,26 +58,28 @@ export class GamePlay extends Component {
     @property(Sprite)
     gameOverLayer = new Sprite();
 
+    @property({type : Enum(VIRUS_TYPE)})
+    virusFrameType   = [];
+
     @property(SpriteFrame)
     virusFramesFull = [];
 
-    @property(SpriteFrame)
-    virusFramesHalfLeft = [];
-
-    @property(SpriteFrame)
-    virusFramesHalfRight = [];
+    @property(Prefab)
+    prefabAnimation = null!;
 
     @property(Prefab)
-    prefabAnimations = [];
-
-    @property({type : Enum(VIRUS_TYPE)})
-    virusFrameType   = [];
+    prefabCoin = null!;
 
     @property(Sprite)
     fireAnimation = new Sprite();
 
     @property(Sprite)
+    confettieAnimation = new Sprite();
+
+    @property(Sprite)
     progressbar:Sprite = null!;
+
+    
 
     @property(AudioClip)
     fire : AudioClip = null!;
@@ -88,7 +91,9 @@ export class GamePlay extends Component {
     start () {
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.gameOverLayer.node.active = false;
+        this.confettieAnimation.node.active = false;
         this.startLevel(1);
+        this.createCoins();
     }
 
     startLevel(levelNum:number){
@@ -105,7 +110,7 @@ export class GamePlay extends Component {
         this.setUpInitialSyringe();
         this.rotateRotator();
         this.setInjectionCount();
-
+        this.schedule(this.checkCollision, 0.001);
         console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
@@ -135,10 +140,7 @@ export class GamePlay extends Component {
         for(let i=0;i<this.virusFramesFull.length;i++){
             this.virusInfo.push({ 
                 type            : this.virusFrameType[i],
-                spriteFrameFull     : this.virusFramesFull[i],
-                spriteFrameLeft    : this.virusFramesHalfLeft[i],
-                spriteFrameRight   : this.virusFramesHalfRight[i],
-                prefabAnimation   : this.prefabAnimations[i]
+                spriteFrameFull     : this.virusFramesFull[i]
             });
         }
     }
@@ -193,7 +195,7 @@ export class GamePlay extends Component {
     }
     setInjectionCount(){
         let spareArrow = instantiate(this.arrowPrefab);
-        let scale = this.rotator.getComponent(UITransform)?.contentSize.width!  * 0.09/spareArrow.getComponent(UITransform)?.contentSize.width!;
+        let scale = this.rotator.getComponent(UITransform)?.contentSize.width!  * 0.06/spareArrow.getComponent(UITransform)?.contentSize.width!;
 
         spareArrow.setScale(new Vec3(scale,scale,scale));
 
@@ -258,29 +260,64 @@ export class GamePlay extends Component {
             });
         }
         else{
-            console.log("Level Complete, Move to next Level");
             this.unschedule(this.checkCollision);
-            this.resetScene();
-            this.level++
-            this.startLevel(this.level);
+            this.updateGameWinLayer();
+            this.confettieAnimation.node.active = true;
+            this.confettieAnimation.getComponent(Animation)?.play();
+            // this.onGameWin();
         }
     }
 
-    updateGameOverLayer(){
-        
-        
+    onNext(){
+        this.stopConfettie();
+        this.gameOverLayer.node.active = false;
+        console.log("Level Complete, Move to next Level");
+        this.resetScene();
+        this.level++
+        this.startLevel(this.level);
+    }
+
+    stopConfettie(){
+        this.confettieAnimation.getComponent(Animation)?.stop();
+        this.confettieAnimation.node.active = false;
+    }
+
+    updateGameWinLayer(){
         let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
-        levelNumber.string = String("LEVEL"+this.level);
+        levelNumber.string = String("LEVEL "+this.level);
 
         let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
-        scoreValue.string = String(100);
+        scoreValue.string = String(this.levelScore.string);
+
+        let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
+        reviveButton.active = false;
+
+        let nextButton:Button|any = this.gameOverLayer.node.getChildByName("next");
+        nextButton.active = true;
+
+        this.gameOverLayer.node.active = true;
+    }
+    // if(this.virusArray.length>0)
+    updateGameOverLayer(){
+          
+        let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
+        levelNumber.string = String("LEVEL "+this.level);
+
+        let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
+        scoreValue.string = String(this.levelScore.string);
+
+        let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
+        reviveButton.active = true;
+
+        let nextButton:Button|any = this.gameOverLayer.node.getChildByName("next");
+        nextButton.active = false;
 
         this.gameOverLayer.node.active = true;
     }
 
     breakAndBurnVirus(virusData:virus){
 
-        let point:number = getVirusPoints(virusData.type!)
+        let point:number = getVirusPoints(virusData.type!);
         
         this.levelScore.string = String(parseInt(this.levelScore.string) + point);
         this.progressbar.fillRange = this.progressbar.fillRange+ point/this.totalLevelPoints;
@@ -291,39 +328,21 @@ export class GamePlay extends Component {
         let Position = this.rotator.getComponent(UITransform)?.convertToWorldSpaceAR(virusData.virus.position);
         Position = this.bg.getComponent(UITransform)?.convertToNodeSpaceAR(Position!);
 
-        // let virusLeft  = instantiate(this.virusPrefab);
-        // let virusRight = instantiate(this.virusPrefab);  
-
-        // virusLeft.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === virusData.type)?.spriteFrameLeft;
-        // virusRight.getComponent(Sprite)!.spriteFrame = this.virusInfo.find(i => i.type === virusData.type)?.spriteFrameRight;
-
-        // virusLeft.setScale(new Vec3(scale,scale,1));
-        // virusRight.setScale(new Vec3(scale,scale,1));
-
-        let virusBlastAnimation = instantiate(this.virusInfo.find(i => i.type === virusData.type)?.prefabAnimation);
+        this.collectCoinsAnimation(point,Position);
         
+        let virusBlastAnimation = instantiate(this.prefabAnimation);
+        let virusIndex = this.virusInfo.findIndex(i => i.type === virusData.type) +1;
+        
+
+
         virusBlastAnimation.position.y = Position!.y;
         virusBlastAnimation.position.x = Position!.x;
 
-        // virusLeft.position.y = Position!.y;
-        // virusRight.position.y = Position!.y;
-
-        // virusLeft.position.x = Position!.x -50;
-        // virusRight.position.x = Position!.x + 50;
-
-        // this.bg.node.addChild(virusLeft);
-        // this.bg.node.addChild(virusRight);
         this.bg.node.addChild(virusBlastAnimation);
         
-        // tween(virusLeft)
-        // .to(1,{position:this.bonfire.node.position, scale : new Vec3(0,0,0)})
-        // .call(()=>{
-        //     virusLeft.removeFromParent();
-        // })
-        // .start();
-        
-        virusBlastAnimation.getComponent(Animation).play();
+        virusBlastAnimation.getComponent(Animation)?.play("virus"+virusIndex);
         this.fireAnimation.getComponent(Animation)?.play();
+        
         tween(virusBlastAnimation)
         .to(0.5,{position:this.bonfire.node.position})
         .call(()=>{
@@ -335,14 +354,6 @@ export class GamePlay extends Component {
         })
         .start();
 
-        // tween(virusRight)
-        // .to(1,{position:this.bonfire.node.position, scale : new Vec3(0,0,0)})
-        // .call(()=>{
-        //     virusRight.removeFromParent();
-        // })
-        // .start();
-
-        
     }
 
     getY(index:number,sizeN:number){
@@ -438,7 +449,6 @@ export class GamePlay extends Component {
         {
             tween(this.arrow)
             .call(()=>{
-                this.schedule(this.checkCollision, 0.001);
                 SoundManager.getInstance().playSoundEffect(this.syringeFly);
             })
             .to(0.6, { position:new Vec3(0,1000)/*Vec3(this.xDifference*20,this.yDifference * 20,0)*/})
@@ -449,9 +459,9 @@ export class GamePlay extends Component {
                     this.resetSyringePosition();
                 }else{
                     // gameOver
-                    this.updateGameOverLayer();
+                    if(this.virusArray.length!=0)
+                        this.updateGameOverLayer();
                 }
-                this.unschedule(this.checkCollision);
             })
             .start();
             this.canAccessArrow = false;
@@ -459,6 +469,7 @@ export class GamePlay extends Component {
     }
 
     onReplay(){
+        this.stopConfettie();
         this.gameOverLayer.node.active = false;
         this.resetScene();
         this.startLevel(this.level);
@@ -472,5 +483,36 @@ export class GamePlay extends Component {
         this.arrow.removeFromParent();
         this.setUpInitialSyringe();
         this.setInjectionCount();
+    }
+
+    createCoins(){
+        
+        for(let i = 0;i<100;i++){
+            let coin = instantiate(this.prefabCoin);
+            coin.active=false;
+            this.unUsedCoins.push(coin);
+            this.bg.node.addChild(coin);
+        }
+    }
+
+    collectCoinsAnimation(coinsCount:number,position:Vec3|any){
+        
+        tween(this.bg)
+        .call(()=>{
+            let coin:Node|any = this.unUsedCoins.pop();
+            coin.active=true;
+            coin.setPosition(position);
+            tween(coin)
+            .to(0.5, { position:new Vec3(540,960,0)})
+            .call(()=>{
+                coin.active=false;
+                this.unUsedCoins.push(coin);
+            })
+            .start();
+        })
+        .delay(0.1)
+        .union()
+        .repeat(coinsCount)
+        .start();
     }
 }
