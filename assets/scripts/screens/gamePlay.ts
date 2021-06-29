@@ -58,6 +58,12 @@ export class GamePlay extends Component {
     @property(Sprite)
     gameOverLayer = new Sprite();
 
+    @property(Sprite)
+    congratulationLayer = new Sprite();
+
+    @property(Sprite)
+    rewardLayer = new Sprite();
+
     @property({type : Enum(VIRUS_TYPE)})
     virusFrameType   = [];
 
@@ -92,6 +98,8 @@ export class GamePlay extends Component {
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.gameOverLayer.node.active = false;
         this.confettieAnimation.node.active = false;
+        this.rewardLayer.node.active = true;
+        this.congratulationLayer.node.active = false;
         this.startLevel(1);
         this.createCoins();
     }
@@ -130,6 +138,13 @@ export class GamePlay extends Component {
         this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
         this.arrow.position.x = 0;
         this.bg.node.addChild(this.arrow);
+
+        tween(this.arrow)
+        .repeatForever(
+            tween()
+            .by(0.5, { position: new Vec3(0, +100, 10) }, { easing: 'sineOut'})
+            .by(0.5, { position: new Vec3(0, -100, 0) }, { easing: 'sineIn'})
+        ).start();
     }
     resetSyringePosition(){
         this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
@@ -514,5 +529,14 @@ export class GamePlay extends Component {
         .union()
         .repeat(coinsCount)
         .start();
+    }
+
+    onRewardButton(event:any,  customEventData:any){
+        console.log(event, customEventData);
+        parseInt(customEventData);
+        this.rewardLayer.node.active = false;
+        this.congratulationLayer.node.active = true;
+        this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
+        this.congratulationLayer.node.getChildByName('Cupon')!.getComponent(Animation)?.play();
     }
 }
