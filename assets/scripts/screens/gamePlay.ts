@@ -11,6 +11,7 @@ export class GamePlay extends Component {
     //touch points
     arrowTouchBeganPoint:any;
     canAccessArrow :Boolean = false;
+    coinMultiplyFactor:number=0;
 
     level:number = 0;
     maxLevel:number = 6;
@@ -34,7 +35,6 @@ export class GamePlay extends Component {
     @property(Prefab)
     dotPrefab = new Prefab();
 
-    @property(Prefab)
     arrowPrefab = new Prefab();
 
     @property(Label)
@@ -42,6 +42,9 @@ export class GamePlay extends Component {
 
     @property(Label)
     levelScore = new Label();
+
+    @property(Label)
+    cuponDiscount = new Label();
 
     @property(Node)
     injectionCount = new Node();
@@ -69,6 +72,12 @@ export class GamePlay extends Component {
 
     @property(SpriteFrame)
     virusFramesFull = [];
+
+    @property({type : Enum(SYRINGE_TYPE)})
+    syringesType:Array<SYRINGE_TYPE> = [];
+
+    @property(Prefab)
+    syringes = [];
 
     @property(Prefab)
     prefabAnimation = null!;
@@ -98,13 +107,18 @@ export class GamePlay extends Component {
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.gameOverLayer.node.active = false;
         this.confettieAnimation.node.active = false;
-        this.rewardLayer.node.active = true;
+        this.rewardLayer.node.active = false;
         this.congratulationLayer.node.active = false;
         this.startLevel(1);
         this.createCoins();
     }
 
     startLevel(levelNum:number){
+
+        this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
+        
+        this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
+
         if(this.maxLevel < levelNum){
             console.log("Maximum Level reached");
             return;
@@ -202,6 +216,8 @@ export class GamePlay extends Component {
             this.rotator.node.addChild(this.virus);
             this.virus.setScale(new Vec3(scale,scale,1));
         });
+
+        this.totalLevelPoints = this.totalLevelPoints * this.coinMultiplyFactor;
         console.log("Points "+this.totalLevelPoints);
     }
 
@@ -279,6 +295,8 @@ export class GamePlay extends Component {
             this.updateGameWinLayer();
             this.confettieAnimation.node.active = true;
             this.confettieAnimation.getComponent(Animation)?.play();
+
+            this.rewardLayer.node.active = true;
             // this.onGameWin();
         }
     }
@@ -332,7 +350,7 @@ export class GamePlay extends Component {
 
     breakAndBurnVirus(virusData:virus){
 
-        let point:number = getVirusPoints(virusData.type!);
+        let point:number = getVirusPoints(virusData.type!) * this.coinMultiplyFactor;
         
         this.levelScore.string = String(parseInt(this.levelScore.string) + point);
         this.progressbar.fillRange = this.progressbar.fillRange+ point/this.totalLevelPoints;
@@ -535,8 +553,17 @@ export class GamePlay extends Component {
         console.log(event, customEventData);
         parseInt(customEventData);
         this.rewardLayer.node.active = false;
-        this.congratulationLayer.node.active = true;
-        this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
-        this.congratulationLayer.node.getChildByName('Cupon')!.getComponent(Animation)?.play();
+        tween(this.bg)
+        .call(()=>{
+            this.cuponDiscount.string = String(Math.floor(Math.random() * parseInt(this.levelScore.string)))+"%";
+            this.congratulationLayer.node.active = true;
+            this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
+            this.congratulationLayer.node.getChildByName('Cupon')!.getComponent(Animation)?.play();
+        })
+        .delay(6)
+        .call(()=>{
+            this.congratulationLayer.node.active = false;
+        })
+        .start();
     }
 }

@@ -8482,15 +8482,14 @@
       "__uuid__": "4ea452e7-13fa-4728-8cc9-fd03bcc15ded",
       "__expectedType__": "cc.Prefab"
     },
-    "arrowPrefab": {
-      "__uuid__": "acbd69b4-be8f-484c-b04f-0260160266a1",
-      "__expectedType__": "cc.Prefab"
-    },
     "levelNum": {
       "__id__": 43
     },
     "levelScore": {
       "__id__": 66
+    },
+    "cuponDiscount": {
+      "__id__": 310
     },
     "injectionCount": {
       "__id__": 23
@@ -8565,6 +8564,55 @@
       {
         "__uuid__": "9a90bdf3-66d6-4be2-b391-c36615443007@f9941",
         "__expectedType__": "cc.SpriteFrame"
+      }
+    ],
+    "syringesType": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "syringes": [
+      {
+        "__uuid__": "c4c50137-16bd-43f6-b4f4-fa80bc294412",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "c866d28d-6628-4cc8-b781-7c17460b4215",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "d04487d9-be98-4149-8874-265e94ff2dc6",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "cf6b0cec-12c7-470d-b7f5-b545f534f7f3",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "e52d1ffb-5079-45cd-9993-c591953da257",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "1fcb402a-9425-4362-a710-32c7a0a58f65",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "fa364885-7f12-4f24-acc2-9571a037fa09",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "bcba3083-65e4-4a4b-9243-7cecb8e598e5",
+        "__expectedType__": "cc.Prefab"
+      },
+      {
+        "__uuid__": "c9ad09c7-4a77-4c54-8d8b-96f9e26da833",
+        "__expectedType__": "cc.Prefab"
       }
     ],
     "prefabAnimation": {
