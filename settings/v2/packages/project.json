@@ -1,0 +1,28 @@
+{
+  "__version__": "1.0.1",
+  "general": {
+    "designResolution": {
+      "width": 1080,
+      "height": 1920,
+      "fitHeight": true,
+      "fitWidth": true
+    }
+  },
+  "physics": {
+    "collisionMatrix": {
+      "0": 0,
+      "1": 0,
+      "2": 0
+    },
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "virus"
+      },
+      {
+        "index": 2,
+        "name": "arrow"
+      }
+    ]
+  }
+}
