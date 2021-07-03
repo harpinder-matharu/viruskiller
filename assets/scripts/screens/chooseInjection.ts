@@ -6,19 +6,27 @@ const { ccclass, property } = _decorator;
 @ccclass('ChooseInjection')
 export class ChooseInjection extends Component {
 
+    _delagateScript: Component | undefined;
+
     start () {
         gameManager.getInstance().setSceneType(SCENE_TYPE.SYRINGE_SELECTION);
         
+    }
+
+    setDelegate(delegate: Component){
+        this._delagateScript = delegate;
     }
 
     onInjectionButton(event:any,  customEventData:any){
         console.log(event, customEventData);
         let syringeType:SYRINGE_TYPE = parseInt(customEventData);
         gameManager.getInstance().setSyringeType(syringeType);
+        this._delagateScript!.updateSyringeType();
+        this.node.active =false;
     }
 
-    onBackButton(){
-        director.loadScene("landingScene");
-    }
+    // onBackButton(){
+    //     director.loadScene("landingScene");
+    // }
 }
 

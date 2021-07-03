@@ -22,86 +22,48 @@ export class GamePlay extends Component {
     yDifference:number = 0;
 
     levelData :any;
-    virus:Node = new Node();
+    virus:Node  = null!;
 
     virusArray : Array<virus> = new Array(); //container 
-    arrow:Node = new Node();
+    arrow:Node =  null!;
     virusInfo : Array<visurInfo> = new Array();
     unUsedCoins : Array<Node> = new Array();
-    
-    @property(Prefab)
-    virusPrefab = new Prefab();
-
-    @property(Prefab)
-    dotPrefab = new Prefab();
 
     arrowPrefab = new Prefab();
 
-    @property(Label)
-    levelNum = new Label();
+    @property(Label)    levelNum :Label = null!;
+    @property(Label)    levelScore :Label = null!;
+    @property(Label)    cuponDiscount :Label = null!;
 
-    @property(Label)
-    levelScore = new Label();
+    @property(Node)    injectionCount :Node = null!;
+    @property(Node)    selectInjection :Node = null!;
+    @property(Sprite)    bg :Sprite = null!;
+    @property(Sprite)    bonfire :Sprite = null!;
+    @property(Sprite)    rotator :Sprite = null!;
+    @property(Sprite)    gameOverLayer :Sprite = null!;
+    @property(Sprite)    congratulationLayer :Sprite = null!;
+    @property(Sprite)    rewardLayer :Sprite = null!;
+    @property(Sprite)    fireAnimation :Sprite = null!;
+    @property(Sprite)    confettieAnimation :Sprite = null!;
+    @property(Sprite)    progressbar:Sprite = null!;
 
-    @property(Label)
-    cuponDiscount = new Label();
-
-    @property(Node)
-    injectionCount = new Node();
-
-    @property(Sprite)
-    bg = new Sprite();
-
-    @property(Sprite)
-    bonfire = new Sprite();
-
-    @property(Sprite)
-    rotator = new Sprite();
-
-    @property(Sprite)
-    gameOverLayer = new Sprite();
-
-    @property(Sprite)
-    congratulationLayer = new Sprite();
-
-    @property(Sprite)
-    rewardLayer = new Sprite();
+    @property(Prefab)    prefabAnimation:Prefab = null!;
+    @property(Prefab)    prefabCoin :Prefab = null!;
+    @property(Prefab)    virusPrefab :Prefab = null!;
+    @property(Prefab)    dotPrefab :Prefab = null!;
 
     @property({type : Enum(VIRUS_TYPE)})
     virusFrameType   = [];
-
     @property(SpriteFrame)
     virusFramesFull = [];
 
     @property({type : Enum(SYRINGE_TYPE)})
     syringesType:Array<SYRINGE_TYPE> = [];
+    @property(Prefab)    syringes = [];
 
-    @property(Prefab)
-    syringes = [];
-
-    @property(Prefab)
-    prefabAnimation = null!;
-
-    @property(Prefab)
-    prefabCoin = null!;
-
-    @property(Sprite)
-    fireAnimation = new Sprite();
-
-    @property(Sprite)
-    confettieAnimation = new Sprite();
-
-    @property(Sprite)
-    progressbar:Sprite = null!;
-
-    
-
-    @property(AudioClip)
-    fire : AudioClip = null!;
-    @property(AudioClip)
-    blast : AudioClip = null!;
-    @property(AudioClip)
-    syringeFly : AudioClip = null!;
+    @property(AudioClip)    fire : AudioClip = null!;
+    @property(AudioClip)    blast : AudioClip = null!;
+    @property(AudioClip)    syringeFly : AudioClip = null!;
 
     start () {
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
@@ -109,6 +71,11 @@ export class GamePlay extends Component {
         this.confettieAnimation.node.active = false;
         this.rewardLayer.node.active = false;
         this.congratulationLayer.node.active = false;
+        this.selectInjection.active =false;
+
+        let selectInjectionScript:any = this.selectInjection.getComponent("ChooseInjection");
+        selectInjectionScript!.setDelegate(this);
+
         this.startLevel(1);
         this.createCoins();
     }
@@ -118,7 +85,7 @@ export class GamePlay extends Component {
         this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
         
         this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
-
+        
         if(this.maxLevel < levelNum){
             console.log("Maximum Level reached");
             return;
@@ -136,6 +103,14 @@ export class GamePlay extends Component {
         console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
+    updateSyringeType(){ 
+        this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
+        this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
+        this.setUpInitialSyringe();
+
+        console.log("i tyep "+this.coinMultiplyFactor);
+    }
+
     resetScene(){
         this.rotator.node.removeAllChildren();
         this.injectionCount.removeAllChildren();
@@ -146,8 +121,12 @@ export class GamePlay extends Component {
         this.levelData = getLevelData(this.level);
     }
     setUpInitialSyringe(){
+
+        if(this.arrow)
+            this.arrow.removeFromParent();
+
         this.arrow = instantiate(this.arrowPrefab);
-        let scale = this.rotator.getComponent(UITransform)?.contentSize.width!  * 0.12/this.arrow.getComponent(UITransform)?.contentSize.width!;
+        let scale = this.bg.getComponent(UITransform)?.contentSize.height!  * 0.2/this.arrow.getComponent(UITransform)?.contentSize.height!;
         this.arrow.setScale(new Vec3(scale,scale,scale));
         this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
         this.arrow.position.x = 0;
@@ -156,8 +135,8 @@ export class GamePlay extends Component {
         tween(this.arrow)
         .repeatForever(
             tween()
-            .by(0.5, { position: new Vec3(0, +100, 10) }, { easing: 'sineOut'})
-            .by(0.5, { position: new Vec3(0, -100, 0) }, { easing: 'sineIn'})
+            .by(0.5, { position: new Vec3(0, +50, 10) }, { easing: 'sineOut'})
+            .by(0.5, { position: new Vec3(0, -50, 0) }, { easing: 'sineIn'})
         ).start();
     }
     resetSyringePosition(){
@@ -251,11 +230,11 @@ export class GamePlay extends Component {
         tween(this.rotator.node)
         .repeatForever(
             tween()
-            .by(Math.floor(Math.random() * 1)+ 1, {  angle : 180})
-            .by(Math.floor(Math.random() * 2)+ 1, {  angle : 180})
-            .by(Math.floor(Math.random() * 1)+ 1, {  angle : 10})
-            .by(Math.floor(Math.random() * 2)+ 1, {  angle : -180})
-            .by(Math.floor(Math.random() * 1)+ 1, {  angle : -180})
+            .by(Math.floor(Math.random() * 3)+ 1, {  angle : 360})
+            .by(Math.floor(Math.random() * 4)+ 1, {  angle : 360})
+            .by(Math.floor(Math.random() * 3)+ 1, {  angle : 10})
+            .by(Math.floor(Math.random() * 4)+ 1, {  angle : -360})
+            .by(Math.floor(Math.random() * 3)+ 1, {  angle : -360})
         )
         .start();
 
@@ -565,5 +544,9 @@ export class GamePlay extends Component {
             this.congratulationLayer.node.active = false;
         })
         .start();
+    }
+
+    onSyringeButton(){
+        this.selectInjection.active = true;
     }
 }
