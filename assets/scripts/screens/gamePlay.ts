@@ -18,6 +18,8 @@ export class GamePlay extends Component {
     totalLevelPoints:number = 0;
 
     injectionsLeft:number = 0;
+    miss:number = 0;
+    virusesDistroyedInOneShot:number = 0;
     xDifference:number = 0;
     yDifference:number = 0;
 
@@ -34,6 +36,7 @@ export class GamePlay extends Component {
     @property(Label)    levelNum :Label = null!;
     @property(Label)    levelScore :Label = null!;
     @property(Label)    cuponDiscount :Label = null!;
+    @property(Label)    message :Label = null!;
 
     @property(Node)    injectionCount :Node = null!;
     @property(Node)    selectInjection :Node = null!;
@@ -81,7 +84,7 @@ export class GamePlay extends Component {
     }
 
     startLevel(levelNum:number){
-
+        this.miss = 0;
         this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
         
         this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
@@ -98,7 +101,7 @@ export class GamePlay extends Component {
         this.setUpViruses();
         this.setUpInitialSyringe();
         this.rotateRotator();
-        this.setInjectionCount();
+        // this.setInjectionCount();
         this.schedule(this.checkCollision, 0.001);
         console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
@@ -113,7 +116,7 @@ export class GamePlay extends Component {
 
     resetScene(){
         this.rotator.node.removeAllChildren();
-        this.injectionCount.removeAllChildren();
+        // this.injectionCount.removeAllChildren();
         this.arrow.removeFromParent();
     }
 
@@ -230,19 +233,13 @@ export class GamePlay extends Component {
         tween(this.rotator.node)
         .repeatForever(
             tween()
-            .by(Math.floor(Math.random() * 3)+ 1, {  angle : 360})
-            .by(Math.floor(Math.random() * 4)+ 1, {  angle : 360})
-            .by(Math.floor(Math.random() * 3)+ 1, {  angle : 10})
-            .by(Math.floor(Math.random() * 4)+ 1, {  angle : -360})
-            .by(Math.floor(Math.random() * 3)+ 1, {  angle : -360})
+            .by(Math.floor(Math.random() * 1)+ 2, {  angle : 360})
+            .by(Math.floor(Math.random() * 2)+ 2, {  angle : 360})
+            .by(Math.floor(Math.random() * 1)+ 2, {  angle : 10})
+            .by(Math.floor(Math.random() * 2)+ 2, {  angle : -360})
+            .by(Math.floor(Math.random() * 1)+ 2, {  angle : -360})
         )
         .start();
-
-        // .by(1, {  angle : 180})
-        // .by(2, {  angle : 180})
-        // .by(0.5, {  angle : 10})
-        // .by(2, {  angle : -180})
-        // .by(1, {  angle : -180})
     }
 
     checkArrowIntersectWith(virus :any| Node){
@@ -262,6 +259,7 @@ export class GamePlay extends Component {
             this.virusArray.forEach((virusData,index,aar) =>{
                 if (this.checkArrowIntersectWith(virusData.virus)){
                     console.log("Collision");
+                    this.virusesDistroyedInOneShot++;
                     SoundManager.getInstance().playSoundEffect(this.blast);
                     this.breakAndBurnVirus(virusData);
                     virusData.virus.active = false;
@@ -437,7 +435,8 @@ export class GamePlay extends Component {
         let touchPointOnBg = this.bg!.getComponent(UITransform)?.convertToNodeSpaceAR(v3(eventLocation.x, eventLocation.y,0)); 
         
         if(this.arrow!.getComponent(UITransform)?.getBoundingBox().contains(v2(touchPointOnBg!.x, touchPointOnBg!.y))){
-            // arrow touched    
+            // arrow touched  
+            this.virusesDistroyedInOneShot = 0;  
             this.arrowTouchBeganPoint = eventLocation;
             console.log("Arrow Touched");
             this.canAccessArrow = true;
@@ -465,15 +464,33 @@ export class GamePlay extends Component {
             })
             .to(0.6, { position:new Vec3(0,1000)/*Vec3(this.xDifference*20,this.yDifference * 20,0)*/})
             .call(()=>{
-                this.injectionsLeft--;
-                if(this.injectionsLeft>0){
-                    this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
-                    this.resetSyringePosition();
-                }else{
-                    // gameOver
+                // this.injectionsLeft--;
+                // if(this.injectionsLeft>0){
+                //     // this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
+                //     this.resetSyringePosition();
+                // }else{
+                //     // gameOver
+                //     if(this.virusArray.length!=0)
+                //         this.updateGameOverLayer();
+                // }
+
+                if(this.virusesDistroyedInOneShot ==0){
+                    this.miss++;
+                    this.showMessage("Miss!");
+                }
+                else{
+                    this.showMessage("Great!");
+                }
+                
+                if(this.miss ==3){
                     if(this.virusArray.length!=0)
                         this.updateGameOverLayer();
                 }
+                else{
+                    this.resetSyringePosition();
+                }
+
+                console.log(`MISS : ${this.miss}, Collisions : ${this.virusesDistroyedInOneShot}`);
             })
             .start();
             this.canAccessArrow = false;
@@ -490,11 +507,12 @@ export class GamePlay extends Component {
         director.loadScene("landingScene");
     }
     onRevive(){
+        this.miss = 0;
         this.gameOverLayer.node.active = false;
-        this.injectionCount.removeAllChildren();
+        // this.injectionCount.removeAllChildren();
         this.arrow.removeFromParent();
         this.setUpInitialSyringe();
-        this.setInjectionCount();
+        // this.setInjectionCount();
     }
 
     createCoins(){
@@ -548,5 +566,15 @@ export class GamePlay extends Component {
 
     onSyringeButton(){
         this.selectInjection.active = true;
+    }
+
+    showMessage(message: string){
+        this.message.string = message;
+
+        tween(this.message.node)
+        .to(0.2, { scale: new Vec3(1,1,1) })
+        .delay(0.4)
+        .to(0.2, { scale: new Vec3(0,0,0) })
+        .start();
     }
 }
