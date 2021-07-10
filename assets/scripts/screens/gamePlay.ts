@@ -607,7 +607,11 @@ export class GamePlay extends Component {
             this.rewardBox.getComponent("GiftBox")!.playAnimation("30%");
             // event.target.getChildByName("gift").active = true;
         }else{
-            this.rewardBox.removeFromParent();
+            if(this.rewardBox){
+                this.rewardBox.removeFromParent();
+                this.rewardBox = null!;
+            }
+            
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
             touchRestriction.active = false;
             this.rewardLayer.node.active = false;

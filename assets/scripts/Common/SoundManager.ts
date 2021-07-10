@@ -1,4 +1,5 @@
 import { AudioClip, AudioSource } from "cc";
+import { gameManager } from "./gameManager";
 
 
 export class SoundManager{
@@ -18,7 +19,11 @@ export class SoundManager{
     }
 
     playSoundEffect(clip : AudioClip){ 
-        this._audioSource.playOneShot(clip, 1);
+
+        if(gameManager.getInstance().getSound()){
+            this._audioSource.playOneShot(clip, 1);
+        }
+        
 
     }
 
@@ -35,10 +40,12 @@ export class SoundManager{
 
 
     playMusic(loop :boolean){
-        this._audioSource.loop = loop;
-        console.log(" this._audioSource.play()");
-        if(!this._audioSource.playing){
-            this._audioSource.play();
+        if(gameManager.getInstance().getMusic()){
+            this._audioSource.loop = loop;
+            console.log(" this._audioSource.play()");
+            if(!this._audioSource.playing){
+                this._audioSource.play();
+            }
         }
     }
 
