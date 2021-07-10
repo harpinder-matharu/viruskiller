@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation, AudioClip, AudioSource, AnimationClip, Button, color } from 'cc';
 import {gameManager , IN_GAME_CURR_OP, SCENE_TYPE, SYRINGE_TYPE} from '../Common/gameManager';
 const { ccclass, property } = _decorator;
-import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints} from '../Common/virusData';
+import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints,getVirusAnimationName,getVirusDestroyAnimationName} from '../Common/virusData';
 import { SoundManager } from '../Common/SoundManager';
 
 @ccclass('GamePlay')
@@ -13,7 +13,7 @@ export class GamePlay extends Component {
     coinMultiplyFactor:number=0;
 
     level:number = 0;
-    maxLevel:number = 6;
+    maxLevel:number = 7;
     totalLevelPoints:number = 0;
 
     injectionsLeft:number = 0;
@@ -61,6 +61,8 @@ export class GamePlay extends Component {
     @property(SpriteFrame)
     virusFramesFull = [];
 
+
+
     @property({type : Enum(SYRINGE_TYPE)})
     syringesType:Array<SYRINGE_TYPE> = [];
     @property(Prefab)    syringes = [];
@@ -82,7 +84,7 @@ export class GamePlay extends Component {
         let selectInjectionScript:any = this.selectInjection.getComponent("ChooseInjection");
         selectInjectionScript!.setDelegate(this);
 
-        this.startLevel(1);
+        this.startLevel(7);
         this.createCoins();
     }
 
@@ -106,6 +108,11 @@ export class GamePlay extends Component {
         this.rotateRotator();
         // this.setInjectionCount();
         this.schedule(this.checkCollision, 0.001);
+
+        if(this.levelData.bonusLevel){
+            this.showMessage("Bonus Level!");
+        }
+        
         console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
@@ -165,6 +172,7 @@ export class GamePlay extends Component {
 
         //difference between viruses
         let numRowColumn = this.levelData.rowXCol;
+        let bonusLevel = this.levelData.bonusLevel;
         let diffBtwnViruses = this.rotator.getComponent(UITransform)?.contentSize.height!  / (numRowColumn+2);
 
         //size of virus
@@ -199,6 +207,15 @@ export class GamePlay extends Component {
             dot.position = virusPosition;
             this.rotator.node.addChild(dot);
             this.rotator.node.addChild(this.virus);
+
+            if(bonusLevel){
+                let virusBlastAnimation = instantiate(this.prefabAnimation);
+                this.virus.addChild(virusBlastAnimation);
+                virusBlastAnimation.getComponent(Animation)?.play(getVirusAnimationName(virus.type));
+                virusBlastAnimation.setScale(new Vec3(scale*0.5,scale*0.5,0.5));
+            }
+            
+            
             this.virus.setScale(new Vec3(scale,scale,1));
         });
 
@@ -362,7 +379,7 @@ export class GamePlay extends Component {
         this.collectCoinsAnimation(point,Position);
         
         let virusBlastAnimation = instantiate(this.prefabAnimation);
-        let virusIndex = this.virusInfo.findIndex(i => i.type === virusData.type) +1;
+        // let virusIndex = this.virusInfo.findIndex(i => i.type === virusData.type) +1;
         
 
 
@@ -371,7 +388,7 @@ export class GamePlay extends Component {
 
         this.bg.node.addChild(virusBlastAnimation);
         
-        virusBlastAnimation.getComponent(Animation)?.play("virus"+virusIndex);
+        virusBlastAnimation.getComponent(Animation)?.play(getVirusDestroyAnimationName(virusData.type!));
         this.fireAnimation.getComponent(Animation)?.play();
         
         tween(virusBlastAnimation)

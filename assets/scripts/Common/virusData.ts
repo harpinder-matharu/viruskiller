@@ -11,7 +11,10 @@ export enum VIRUS_TYPE{
     TYPE7 = 7,
     TYPE8 = 8,
     TYPE9 = 9,
-    TYPE10= 10
+    TYPE10= 10,
+    TYPE11= 11,
+    TYPE12= 12,
+    TYPE13= 13
 }
 
 export function getVirusPower(virusType:VIRUS_TYPE) {
@@ -35,6 +38,72 @@ export function getVirusPower(virusType:VIRUS_TYPE) {
     return power;
 }
 
+export function getVirusAnimationName(virusType:VIRUS_TYPE) {
+    let animationName:string = "0";
+    switch (virusType){
+        case VIRUS_TYPE.TYPE11 :
+            animationName = "sparkleVirus1";
+            break;
+        case VIRUS_TYPE.TYPE12 :
+            animationName = "sparkleVirus2";
+            break;
+        case VIRUS_TYPE.TYPE13 :
+            animationName = "sparkleVirus3";
+            break;
+        default :
+            break;
+    }
+    return animationName;
+}
+
+export function getVirusDestroyAnimationName(virusType:VIRUS_TYPE) {
+    let animationName:string = "0";
+    switch (virusType){
+        case VIRUS_TYPE.TYPE1 :
+            animationName = "virus1";
+            break;
+        case VIRUS_TYPE.TYPE2 :
+            animationName = "virus2";
+            break;
+        case VIRUS_TYPE.TYPE3 :
+            animationName = "virus3";
+            break;
+        case VIRUS_TYPE.TYPE4 :
+            animationName = "virus4";
+            break;
+        case VIRUS_TYPE.TYPE5 :
+            animationName = "virus5";
+            break;
+        case VIRUS_TYPE.TYPE6 :
+            animationName = "virus6";
+            break;
+        case VIRUS_TYPE.TYPE7 :
+            animationName = "virus7";
+            break;
+        case VIRUS_TYPE.TYPE8 :
+            animationName = "virus8";
+            break;
+        case VIRUS_TYPE.TYPE9 :
+            animationName = "virus9";
+            break;
+        case VIRUS_TYPE.TYPE10 :
+            animationName = "virus10";
+            break;
+        case VIRUS_TYPE.TYPE11 :
+            animationName = "virus11";
+            break;
+        case VIRUS_TYPE.TYPE12 :
+            animationName = "virus12";
+            break;
+        case VIRUS_TYPE.TYPE13 :
+            animationName = "virus13";
+            break;
+        default :
+            break;
+    }
+    return animationName;
+}
+
 export function getVirusPoints(virusType:VIRUS_TYPE) {
     let points:number = 0;
     switch (virusType){
@@ -56,17 +125,26 @@ export function getVirusPoints(virusType:VIRUS_TYPE) {
         case VIRUS_TYPE.TYPE6 :
             points = 6;
             break;
-        case VIRUS_TYPE.TYPE3 :
+        case VIRUS_TYPE.TYPE7 :
             points = 7;
             break;
-        case VIRUS_TYPE.TYPE4 :
+        case VIRUS_TYPE.TYPE8 :
             points = 8;
             break;
-        case VIRUS_TYPE.TYPE5 :
+        case VIRUS_TYPE.TYPE9 :
             points = 9;
             break;
-        case VIRUS_TYPE.TYPE6 :
+        case VIRUS_TYPE.TYPE10 :
             points = 10;
+            break;
+        case VIRUS_TYPE.TYPE11 :
+            points = 11;
+            break;
+        case VIRUS_TYPE.TYPE12 :
+            points = 12;
+            break;
+        case VIRUS_TYPE.TYPE13 :
+            points = 13;
             break;
         default :
             break;
@@ -82,6 +160,7 @@ export function getLevelData(level:number) {
             rowXCol : 5,
             injectionCount : 15,
             scale : 0.12,
+            bonusLevel : false,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE1,
@@ -111,6 +190,7 @@ export function getLevelData(level:number) {
             rowXCol : 5,
             injectionCount : 9,
             scale : 0.12,
+            bonusLevel: false,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE2,
@@ -144,6 +224,7 @@ export function getLevelData(level:number) {
             rowXCol : 5,
             injectionCount : 9,
             scale : 0.12,
+            bonusLevel: false,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE3,
@@ -189,6 +270,7 @@ export function getLevelData(level:number) {
             rowXCol : 5,
             injectionCount : 15,
             scale : 0.12,
+            bonusLevel: false,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE1,
@@ -266,6 +348,7 @@ export function getLevelData(level:number) {
             rowXCol : 3,
             injectionCount : 9,
             scale : 0.2,
+            bonusLevel : false,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE1,
@@ -299,6 +382,7 @@ export function getLevelData(level:number) {
             rowXCol : 5,
             injectionCount : 15,
             scale : 0.12,
+            bonusLevel : false,
             virus : [
                 {
                     "type" : VIRUS_TYPE.TYPE1,
@@ -399,6 +483,36 @@ export function getLevelData(level:number) {
                 {
                     "type" : VIRUS_TYPE.TYPE5,
                     "index" : 25
+                }
+            ]
+
+        }
+        case 7:return {
+            levelNumber : 3,
+            rowXCol : 5,
+            injectionCount : 15,
+            scale : 0.12,
+            bonusLevel : true,
+            virus : [
+                {
+                    "type" : VIRUS_TYPE.TYPE11,
+                    "index" : 3
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE12,
+                    "index" : 8
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE13,
+                    "index" : 13
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE11,
+                    "index" : 18
+                },
+                {
+                    "type" : VIRUS_TYPE.TYPE12,
+                    "index" : 23
                 }
             ]
 

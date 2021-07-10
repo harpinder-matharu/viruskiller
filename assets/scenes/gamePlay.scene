@@ -15153,7 +15153,10 @@
       7,
       8,
       9,
-      10
+      10,
+      11,
+      12,
+      13
     ],
     "virusFramesFull": [
       {
@@ -15194,6 +15197,18 @@
       },
       {
         "__uuid__": "9a90bdf3-66d6-4be2-b391-c36615443007@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "e95b42b6-dcf3-48ab-90c1-12774abe9020@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "10b85f8d-c528-4572-a4e4-e110af0c3cc7@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "994582d8-3ae1-4f74-a245-104267ca2420@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ],
