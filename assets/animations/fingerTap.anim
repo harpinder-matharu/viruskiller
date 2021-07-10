@@ -1,0 +1,116 @@
+[
+  {
+    "__type__": "cc.AnimationClip",
+    "_name": "fingerTap",
+    "_objFlags": 0,
+    "_native": "",
+    "sample": 60,
+    "speed": 0.2,
+    "wrapMode": 2,
+    "events": [],
+    "enableTrsBlending": false,
+    "_duration": 0.25,
+    "_keys": [
+      [
+        0,
+        0.016666666666666666,
+        0.03333333333333333,
+        0.05,
+        0.06666666666666667,
+        0.08333333333333333,
+        0.1,
+        0.11666666666666667,
+        0.13333333333333333,
+        0.15,
+        0.16666666666666666,
+        0.18333333333333332,
+        0.2,
+        0.21666666666666667,
+        0.23333333333333334
+      ]
+    ],
+    "_stepness": 0,
+    "_curves": [
+      {
+        "modifiers": [
+          {
+            "__id__": 1
+          },
+          "spriteFrame"
+        ],
+        "data": {
+          "keys": 0,
+          "values": [
+            {
+              "__uuid__": "55a17794-1ac7-4e7f-8baa-83b465cb4134@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "e2eaa875-36be-4da2-ba88-58b8d59dc304@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "af783a8a-4889-4ae2-ba61-acff0289eaee@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "38b3f351-dd4e-484d-9668-55981f1534bb@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "269bc1f9-329a-4b6d-b545-d5759f0d1a20@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "73f950f3-3205-4e4e-b49b-1163179794a4@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "b8f2bf16-f9b3-45cd-a5b2-d8c477e891ef@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "c8504e21-3fc9-4520-8010-50da087f0967@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "c95db28b-5158-4f5f-b44f-c4ac4e0456b4@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "169232fe-a861-4031-ac85-c4ff5643c23d@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "1e4ff877-848e-49a2-bb24-9028c4192a4e@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "1a522872-5266-4971-af2b-3d3f10ed9428@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "e760bfeb-e52f-4fa6-8a62-b13540e80dd1@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "a0e821c6-169b-46ca-b24f-a3a5e210023d@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "4fc297e9-4e94-404d-8f3b-ae478749cf06@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            }
+          ],
+          "easingMethods": {}
+        }
+      }
+    ],
+    "_commonTargets": [],
+    "_hash": 169689183
+  },
+  {
+    "__type__": "cc.animation.ComponentPath",
+    "component": "cc.Sprite"
+  }
+]

@@ -31,6 +31,9 @@ export class gameManager{
     syringeType: SYRINGE_TYPE = SYRINGE_TYPE.TYPE1;
     coins : number = 0;
 
+    music : boolean = true;
+    sound : boolean = true;
+
     gameManager(){
         this.sceneType = SCENE_TYPE.NONE;
     }
@@ -42,6 +45,20 @@ export class gameManager{
             gameManager._instance = new gameManager();
         }
         return gameManager._instance;
+    }
+
+    setMusic(music:boolean){
+        this.music = music;
+    }
+    getMusic(){
+        return this.music;
+    }
+
+    setSound(sound:boolean){
+        this.sound = sound;
+    }
+    getSound(){
+        return this.sound;
     }
 
     setSyringeType(syringeType : SYRINGE_TYPE){

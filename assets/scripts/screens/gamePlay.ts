@@ -24,6 +24,7 @@ export class GamePlay extends Component {
 
     levelData :any;
     virus:Node  = null!;
+    fingerTap:Node  = null!;
     rewardBox:Node  = null!;
 
     virusArray : Array<virus> = new Array(); //container 
@@ -55,6 +56,7 @@ export class GamePlay extends Component {
     @property(Prefab)    virusPrefab :Prefab = null!;
     @property(Prefab)    dotPrefab :Prefab = null!;
     @property(Prefab)    giftBox :Prefab = null!;
+    @property(Prefab)    finger :Prefab = null!;
 
     @property({type : Enum(VIRUS_TYPE)})
     virusFrameType   = [];
@@ -84,7 +86,7 @@ export class GamePlay extends Component {
         let selectInjectionScript:any = this.selectInjection.getComponent("ChooseInjection");
         selectInjectionScript!.setDelegate(this);
 
-        this.startLevel(7);
+        this.startLevel(1);
         this.createCoins();
     }
 
@@ -151,8 +153,14 @@ export class GamePlay extends Component {
             .by(0.5, { position: new Vec3(0, +50, 10) }, { easing: 'sineOut'})
             .by(0.5, { position: new Vec3(0, -50, 0) }, { easing: 'sineIn'})
         ).start();
+
+        this.fingerTap = instantiate(this.finger);
+        this.arrow.addChild(this.fingerTap);
+        this.fingerTap.getComponent(Animation)?.play("fingerTap");
     }
     resetSyringePosition(){
+
+        this.fingerTap.active = true;
         this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
         this.arrow.position.x = 0;
     }
@@ -312,7 +320,6 @@ export class GamePlay extends Component {
                 })
                 .start();
             }
-            // this.onGameWin();
         }
     }
 
@@ -474,6 +481,8 @@ export class GamePlay extends Component {
         
         if(this.arrow!.getComponent(UITransform)?.getBoundingBox().contains(v2(touchPointOnBg!.x, touchPointOnBg!.y))){
             // arrow touched  
+
+            this.fingerTap.active = false;
             this.virusesDistroyedInOneShot = 0;  
             this.arrowTouchBeganPoint = eventLocation;
             console.log("Arrow Touched");
@@ -592,7 +601,9 @@ export class GamePlay extends Component {
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
             touchRestriction.active = true;
             this.rewardBox = instantiate(this.giftBox);
+            
             event.target.addChild(this.rewardBox);
+            this.rewardBox.setPosition(new Vec3(0,80,0));
             this.rewardBox.getComponent("GiftBox")!.playAnimation("30%");
             // event.target.getChildByName("gift").active = true;
         }else{
@@ -604,6 +615,7 @@ export class GamePlay extends Component {
     }
 
     onSyringeButton(){
+        console.log("Select Injections");
         this.selectInjection.active = true;
     }
 

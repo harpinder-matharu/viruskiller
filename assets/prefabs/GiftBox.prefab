@@ -33,13 +33,10 @@
       },
       {
         "__id__": 28
-      },
-      {
-        "__id__": 30
       }
     ],
     "_prefab": {
-      "__id__": 32
+      "__id__": 30
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -56,8 +53,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 0.4,
-      "y": 0.4,
+      "x": 0.5,
+      "y": 0.5,
       "z": 1
     },
     "_layer": 33554432,
@@ -597,41 +594,6 @@
     "fileId": "e71ctEmpxFC4KlSYRZNz/a"
   },
   {
-    "__type__": "cc.Widget",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 29
-    },
-    "_alignFlags": 45,
-    "_target": null,
-    "_left": 0.021296296296296313,
-    "_right": 0.021296296296296313,
-    "_top": 0.21354166666666669,
-    "_bottom": 0.21354166666666669,
-    "_horizontalCenter": 0,
-    "_verticalCenter": 0,
-    "_isAbsLeft": false,
-    "_isAbsRight": false,
-    "_isAbsTop": false,
-    "_isAbsBottom": false,
-    "_isAbsHorizontalCenter": true,
-    "_isAbsVerticalCenter": true,
-    "_originalWidth": 1440,
-    "_originalHeight": 2560,
-    "_alignMode": 2,
-    "_lockFlags": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "7faaN0bh9PJYaVFsed4Wod"
-  },
-  {
     "__type__": "12c3aLFUohGGZw+FAPByHia",
     "_name": "",
     "_objFlags": 0,
@@ -640,7 +602,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 31
+      "__id__": 29
     },
     "cuponDiscount": {
       "__id__": 14
