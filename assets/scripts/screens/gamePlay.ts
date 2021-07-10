@@ -1,8 +1,7 @@
-
-import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation, AudioClip, AudioSource, AnimationClip, Button } from 'cc';
+import { _decorator, Component, Node, Prefab, SpriteFrame, Enum, Sprite, tween, Vec3, math, instantiate, UITransform, size, assetManager, resources, director, Director, physics, PhysicsSystem, Intersection2D, v3, v2, Collider, Size, Vec2, Label, UI,Animation, AudioClip, AudioSource, AnimationClip, Button, color } from 'cc';
 import {gameManager , IN_GAME_CURR_OP, SCENE_TYPE, SYRINGE_TYPE} from '../Common/gameManager';
 const { ccclass, property } = _decorator;
-import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints} from '../Common/virusData'
+import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints} from '../Common/virusData';
 import { SoundManager } from '../Common/SoundManager';
 
 @ccclass('GamePlay')
@@ -25,6 +24,7 @@ export class GamePlay extends Component {
 
     levelData :any;
     virus:Node  = null!;
+    rewardBox:Node  = null!;
 
     virusArray : Array<virus> = new Array(); //container 
     arrow:Node =  null!;
@@ -38,8 +38,8 @@ export class GamePlay extends Component {
     @property(Label)    cuponDiscount :Label = null!;
     @property(Label)    message :Label = null!;
 
-    @property(Node)    injectionCount :Node = null!;
-    @property(Node)    selectInjection :Node = null!;
+    @property(Node)     injectionCount :Node = null!;
+    @property(Node)     selectInjection :Node = null!;
     @property(Sprite)    bg :Sprite = null!;
     @property(Sprite)    bonfire :Sprite = null!;
     @property(Sprite)    rotator :Sprite = null!;
@@ -54,6 +54,7 @@ export class GamePlay extends Component {
     @property(Prefab)    prefabCoin :Prefab = null!;
     @property(Prefab)    virusPrefab :Prefab = null!;
     @property(Prefab)    dotPrefab :Prefab = null!;
+    @property(Prefab)    giftBox :Prefab = null!;
 
     @property({type : Enum(VIRUS_TYPE)})
     virusFrameType   = [];
@@ -73,6 +74,8 @@ export class GamePlay extends Component {
         this.gameOverLayer.node.active = false;
         this.confettieAnimation.node.active = false;
         this.rewardLayer.node.active = false;
+        let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
+        touchRestriction.active = false;
         this.congratulationLayer.node.active = false;
         this.selectInjection.active =false;
 
@@ -273,7 +276,25 @@ export class GamePlay extends Component {
             this.confettieAnimation.node.active = true;
             this.confettieAnimation.getComponent(Animation)?.play();
 
-            this.rewardLayer.node.active = true;
+            if(Math.floor(Math.random() * 2) == 1){
+                this.rewardLayer.node.active = true;
+            } 
+            else{
+                tween(this.bg)
+                .call(()=>{
+                    this.cuponDiscount.string = String(Math.floor(Math.random() * parseInt(this.levelScore.string)))+"%";
+                    this.congratulationLayer.node.active = true;
+                    this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
+                    this.congratulationLayer.node.getChildByName('Cupon')!.getComponent(Animation)?.play();
+                    this.congratulationLayer.node.getChildByName('text')!.getComponent(Animation)?.play();
+                })
+                .delay(6)
+                .call(()=>{
+                    this.congratulationLayer.node.active = false;
+                    this.congratulationLayer.node.getChildByName('text')!.getComponent(Animation)?.stop();
+                })
+                .start();
+            }
             // this.onGameWin();
         }
     }
@@ -548,20 +569,21 @@ export class GamePlay extends Component {
 
     onRewardButton(event:any,  customEventData:any){
         console.log(event, customEventData);
-        parseInt(customEventData);
-        this.rewardLayer.node.active = false;
-        tween(this.bg)
-        .call(()=>{
-            this.cuponDiscount.string = String(Math.floor(Math.random() * parseInt(this.levelScore.string)))+"%";
-            this.congratulationLayer.node.active = true;
-            this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
-            this.congratulationLayer.node.getChildByName('Cupon')!.getComponent(Animation)?.play();
-        })
-        .delay(6)
-        .call(()=>{
-            this.congratulationLayer.node.active = false;
-        })
-        .start();
+        console.log(event.target);
+
+        if(customEventData!="close"){
+            let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
+            touchRestriction.active = true;
+            this.rewardBox = instantiate(this.giftBox);
+            event.target.addChild(this.rewardBox);
+            this.rewardBox.getComponent("GiftBox")!.playAnimation("30%");
+            // event.target.getChildByName("gift").active = true;
+        }else{
+            this.rewardBox.removeFromParent();
+            let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
+            touchRestriction.active = false;
+            this.rewardLayer.node.active = false;
+        }
     }
 
     onSyringeButton(){

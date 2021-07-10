@@ -5,11 +5,11 @@
     "_objFlags": 0,
     "_native": "",
     "sample": 15,
-    "speed": 1,
-    "wrapMode": 1,
+    "speed": 2,
+    "wrapMode": 2,
     "events": [],
     "enableTrsBlending": false,
-    "_duration": 0.6,
+    "_duration": 1.2,
     "_keys": [
       [
         0,
@@ -18,6 +18,19 @@
       [
         0,
         0.6
+      ],
+      [
+        0,
+        0.6
+      ],
+      [
+        0,
+        0.6
+      ],
+      [
+        0,
+        0.6,
+        1.2
       ]
     ],
     "_stepness": 0,
@@ -73,10 +86,94 @@
           ],
           "easingMethods": {}
         }
+      },
+      {
+        "modifiers": [
+          {
+            "__id__": 3
+          },
+          "scale"
+        ],
+        "data": {
+          "keys": 2,
+          "values": [
+            {
+              "__type__": "cc.Vec3",
+              "x": 5,
+              "y": 5,
+              "z": 1
+            },
+            {
+              "__type__": "cc.Vec3",
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          ],
+          "easingMethods": {}
+        }
+      },
+      {
+        "modifiers": [
+          {
+            "__id__": 4
+          },
+          "eulerAngles"
+        ],
+        "data": {
+          "keys": 3,
+          "values": [
+            {
+              "__type__": "cc.Vec3",
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            {
+              "__type__": "cc.Vec3",
+              "x": 0,
+              "y": 0,
+              "z": 360
+            }
+          ],
+          "easingMethods": {}
+        }
+      },
+      {
+        "modifiers": [
+          {
+            "__id__": 5
+          },
+          "scale"
+        ],
+        "data": {
+          "keys": 4,
+          "values": [
+            {
+              "__type__": "cc.Vec3",
+              "x": 0.8,
+              "y": 0.8,
+              "z": 1
+            },
+            {
+              "__type__": "cc.Vec3",
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            {
+              "__type__": "cc.Vec3",
+              "x": 0.8,
+              "y": 0.8,
+              "z": 1
+            }
+          ],
+          "easingMethods": {}
+        }
       }
     ],
     "_commonTargets": [],
-    "_hash": 2428647618
+    "_hash": 1356144491
   },
   {
     "__type__": "cc.animation.HierarchyPath",
@@ -85,5 +182,17 @@
   {
     "__type__": "cc.animation.HierarchyPath",
     "path": "BG/Message"
+  },
+  {
+    "__type__": "cc.animation.HierarchyPath",
+    "path": "PopUps/gameOverLayer/star1"
+  },
+  {
+    "__type__": "cc.animation.HierarchyPath",
+    "path": "PopUps/gameOverLayer/star1"
+  },
+  {
+    "__type__": "cc.animation.HierarchyPath",
+    "path": "PopUps/Congratulations/text"
   }
 ]
