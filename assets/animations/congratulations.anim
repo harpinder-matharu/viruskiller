@@ -1,0 +1,116 @@
+[
+  {
+    "__type__": "cc.AnimationClip",
+    "_name": "congratulations",
+    "_objFlags": 0,
+    "_native": "",
+    "sample": 60,
+    "speed": 0.2,
+    "wrapMode": 1,
+    "events": [],
+    "enableTrsBlending": false,
+    "_duration": 0.25,
+    "_keys": [
+      [
+        0,
+        0.016666666666666666,
+        0.03333333333333333,
+        0.05,
+        0.06666666666666667,
+        0.08333333333333333,
+        0.1,
+        0.11666666666666667,
+        0.13333333333333333,
+        0.15,
+        0.16666666666666666,
+        0.18333333333333332,
+        0.2,
+        0.21666666666666667,
+        0.23333333333333334
+      ]
+    ],
+    "_stepness": 0,
+    "_curves": [
+      {
+        "modifiers": [
+          {
+            "__id__": 1
+          },
+          "spriteFrame"
+        ],
+        "data": {
+          "keys": 0,
+          "values": [
+            {
+              "__uuid__": "b3171a89-fb26-42e6-ba0d-710e7ebbf6ad@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "9f569f3d-b5d8-4450-ab2f-a0faf34f86ce@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "b4a5be96-04fd-440a-b221-c40101f2c420@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "2e7e2b94-0e1b-4e6c-9665-e74c5037f1d7@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "e709b1a7-a8e1-4336-b766-e0becbc22d6c@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "51bc99b6-9950-470d-990a-5bbbff44fadc@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "e7709e81-2503-48c9-b273-4f16a61142f8@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "8bd8fa90-2539-4d12-8d8c-e70fa614c850@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "0e4840d4-fbd4-4e26-a171-110a83804658@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "1206327c-b71e-4c84-b310-5634669d7d58@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "266cfad8-66ad-4ede-a4ba-337891184f81@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "e111bf97-c192-482f-8cf8-697339fbf339@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "ec5a6775-3c49-4e09-9cee-4914b5feb83f@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "40004cdd-f815-49c6-a861-35efb0a459c6@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            },
+            {
+              "__uuid__": "db78897e-0e70-48af-8473-427208552bc1@f9941",
+              "__expectedType__": "cc.SpriteFrame"
+            }
+          ],
+          "easingMethods": {}
+        }
+      }
+    ],
+    "_commonTargets": [],
+    "_hash": 2995154100
+  },
+  {
+    "__type__": "cc.animation.ComponentPath",
+    "component": "cc.Sprite"
+  }
+]

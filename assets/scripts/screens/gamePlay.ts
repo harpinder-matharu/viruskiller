@@ -108,13 +108,13 @@ export class GamePlay extends Component {
         this.setUpViruses();
         this.setUpInitialSyringe();
         this.rotateRotator();
-        // this.setInjectionCount();
-        this.schedule(this.checkCollision, 0.001);
 
         if(this.levelData.bonusLevel){
+            this.setInjectionCount();
             this.showMessage("Bonus Level!");
         }
-        
+
+        this.schedule(this.checkCollision, 0.001);
         console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
@@ -122,6 +122,11 @@ export class GamePlay extends Component {
         this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
         this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
         this.setUpInitialSyringe();
+
+        if(this.levelData.bonusLevel){
+            this.injectionCount.removeAllChildren();
+            this.setInjectionCount();
+        }
 
         console.log("i tyep "+this.coinMultiplyFactor);
     }
@@ -154,13 +159,17 @@ export class GamePlay extends Component {
             .by(0.5, { position: new Vec3(0, -50, 0) }, { easing: 'sineIn'})
         ).start();
 
-        this.fingerTap = instantiate(this.finger);
-        this.arrow.addChild(this.fingerTap);
-        this.fingerTap.getComponent(Animation)?.play("fingerTap");
+        if(this.level == 1){
+            this.fingerTap = instantiate(this.finger);
+            this.arrow.addChild(this.fingerTap);
+            this.fingerTap.getComponent(Animation)?.play("fingerTap");
+        }
     }
     resetSyringePosition(){
 
-        this.fingerTap.active = true;
+        if(this.level == 1){
+            this.fingerTap.active = true;
+        }
         this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
         this.arrow.position.x = 0;
     }
@@ -482,7 +491,9 @@ export class GamePlay extends Component {
         if(this.arrow!.getComponent(UITransform)?.getBoundingBox().contains(v2(touchPointOnBg!.x, touchPointOnBg!.y))){
             // arrow touched  
 
-            this.fingerTap.active = false;
+            if(this.level == 1){
+                this.fingerTap.active = false;
+            }
             this.virusesDistroyedInOneShot = 0;  
             this.arrowTouchBeganPoint = eventLocation;
             console.log("Arrow Touched");
@@ -511,33 +522,48 @@ export class GamePlay extends Component {
             })
             .to(0.6, { position:new Vec3(0,1000)/*Vec3(this.xDifference*20,this.yDifference * 20,0)*/})
             .call(()=>{
-                // this.injectionsLeft--;
-                // if(this.injectionsLeft>0){
-                //     // this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
-                //     this.resetSyringePosition();
-                // }else{
-                //     // gameOver
-                //     if(this.virusArray.length!=0)
-                //         this.updateGameOverLayer();
-                // }
-
+                
                 if(this.virusesDistroyedInOneShot ==0){
                     this.miss++;
-                    this.showMessage("Miss!");
+                    this.showMessage("Ohh, You missed It..");
                 }
                 else{
-                    this.showMessage("Great!");
-                }
-                
-                if(this.miss ==3){
-                    if(this.virusArray.length!=0)
-                        this.updateGameOverLayer();
-                }
-                else{
-                    this.resetSyringePosition();
+                    if(1 <= this.virusesDistroyedInOneShot && this.virusesDistroyedInOneShot <=2)
+                    {
+                        this.showMessage("Awesome Kill!!");
+                    }
+                    else if(3 <= this.virusesDistroyedInOneShot && this.virusesDistroyedInOneShot <=4){
+                        this.showMessage("What Shot!!");
+                    }
+                    else if(5 <= this.virusesDistroyedInOneShot){
+                        this.showMessage("Killer Shot, Keep Going!!");
+                    }
                 }
 
-                console.log(`MISS : ${this.miss}, Collisions : ${this.virusesDistroyedInOneShot}`);
+
+                if(this.levelData.bonusLevel){
+                    this.injectionsLeft--;
+                    if(this.injectionsLeft>0){
+                        this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
+                        this.resetSyringePosition();
+                    }else{
+                        // gameOver
+                        if(this.virusArray.length!=0)
+                            this.updateGameOverLayer();
+                    }
+
+                }
+                else{
+                    if(this.miss ==3){
+                        if(this.virusArray.length!=0)
+                            this.updateGameOverLayer();
+                    }
+                    else{
+                        this.resetSyringePosition();
+                    }
+    
+                    console.log(`MISS : ${this.miss}, Collisions : ${this.virusesDistroyedInOneShot}`);
+                }
             })
             .start();
             this.canAccessArrow = false;
@@ -556,10 +582,14 @@ export class GamePlay extends Component {
     onRevive(){
         this.miss = 0;
         this.gameOverLayer.node.active = false;
-        // this.injectionCount.removeAllChildren();
+        
         this.arrow.removeFromParent();
         this.setUpInitialSyringe();
-        // this.setInjectionCount();
+
+        if(this.levelData.bonusLevel){
+            this.injectionCount.removeAllChildren();
+            this.setInjectionCount();
+        }
     }
 
     createCoins(){
@@ -632,4 +662,12 @@ export class GamePlay extends Component {
         .to(0.2, { scale: new Vec3(0,0,0) })
         .start();
     }
+
+//     Kill Them All 
+// What Shot!!
+// Killer Shot, Keep Going!!
+// Ohh, You missed It..
+// Keep Trying, Kill them all.
+// Awesome Kill.
+
 }

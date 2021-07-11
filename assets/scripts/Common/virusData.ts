@@ -111,40 +111,40 @@ export function getVirusPoints(virusType:VIRUS_TYPE) {
             points = 1;
             break;
         case VIRUS_TYPE.TYPE2 :
-            points = 2;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE3 :
-            points = 3;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE4 :
-            points = 4;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE5 :
-            points = 5;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE6 :
-            points = 6;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE7 :
-            points = 7;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE8 :
-            points = 8;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE9 :
-            points = 9;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE10 :
-            points = 10;
+            points = 1;
             break;
         case VIRUS_TYPE.TYPE11 :
-            points = 11;
+            points = 2;
             break;
         case VIRUS_TYPE.TYPE12 :
-            points = 12;
+            points = 2;
             break;
         case VIRUS_TYPE.TYPE13 :
-            points = 13;
+            points = 2;
             break;
         default :
             break;
@@ -490,7 +490,7 @@ export function getLevelData(level:number) {
         case 7:return {
             levelNumber : 3,
             rowXCol : 5,
-            injectionCount : 15,
+            injectionCount : 5,
             scale : 0.12,
             bonusLevel : true,
             virus : [

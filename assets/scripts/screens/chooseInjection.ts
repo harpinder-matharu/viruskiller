@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node ,director} from 'cc';
+import { _decorator, Component, Node ,director, Label} from 'cc';
 import {gameManager , IN_GAME_CURR_OP, SCENE_TYPE, SYRINGE_TYPE} from '../Common/gameManager';
 const { ccclass, property } = _decorator;
 
@@ -13,6 +13,8 @@ export class ChooseInjection extends Component {
         
     }
 
+    @property(Label)    totalCoins :Label = null!;
+    
     setDelegate(delegate: Component){
         this._delagateScript = delegate;
     }
@@ -20,13 +22,17 @@ export class ChooseInjection extends Component {
     onInjectionButton(event:any,  customEventData:any){
         console.log(event, customEventData);
         let syringeType:SYRINGE_TYPE = parseInt(customEventData);
+
+        
         gameManager.getInstance().setSyringeType(syringeType);
         this._delagateScript!.updateSyringeType();
         this.node.active =false;
     }
 
-    // onBackButton(){
-    //     director.loadScene("landingScene");
-    // }
+
+
+    onCloseButton(){
+        this.node.active = false;
+    }
 }
 
