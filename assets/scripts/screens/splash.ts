@@ -13,35 +13,44 @@ export class SplashScreen extends Component {
     start () {
 
         // let gp = new BlaashGameSDK("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
-        // console.log(gp);
-        // let data:any = gp.onGameStart();
-        // console.log(data);
-        // console.log(JSON.stringify(data));
 
-        // gp.onGameStart()
-        // .then((data:any)=>{
-        //     console.log(data);
-        // })
-        // .catch((error:any)=>{
-        //     console.log("error while laoding game data",  error);
+        
+        
+
+        // let prom2 =  gp.onLevelComplete(1, 100); // error in this
+        // prom2.then((val:any)=> {
+        //     console.log('onLevelComplete executed: ');
+        //     console.log(val);
+        // }).catch((err:any) => {
+        //     console.log('onLevelComplete executed: ' + err);
+        // }).finally(() => {
+        //     console.log('onLevelComplete done executing');
         // });
         
-        // let prom =  gp.onGameStart();
-        // prom.then((val) => {
-        //     console.log('asynchronously executed: ' + val);
-        //   }).catch((err) => {
-        //     console.log('asynchronously executed: ' + err);
-        //   }).finally(() => {
-        //     console.log('promise done executing');
-        //   });
+        
 
-        // fetch(gp.onGameStart(), {
-        //     mode: "no-cors"
-        // }).then((data:any)=>{
-        //     console.log(data);
-        // })
-        // .catch((error:any)=>{
-        //     console.log("error while laoding game data",  error);
+        // let prom4 =  gp.onGameOver(2, 200);  // error
+        // prom4.then((val:any)=> {
+        //     console.log('onGameOver executed: ');
+        //     console.log(val);
+        // }).catch((err:any) => {
+        //     console.log('onGameOver executed: ' + err);
+        // }).finally(() => {
+        //     console.log('onGameOver done executing');
+        // });
+
+        
+
+        // 
+
+        // let prom6 =  gp.onPurchase(500); //error
+        // prom6.then((val:any)=> {
+        //     console.log('onPurchase executed: ');
+        //     console.log(val);
+        // }).catch((err:any) => {
+        //     console.log('onPurchase executed: ' + err);
+        // }).finally(() => {
+        //     console.log('onPurchase done executing');
         // });
 
 
