@@ -4,6 +4,8 @@ const { ccclass, property } = _decorator;
 import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints,getVirusAnimationName,getVirusDestroyAnimationName} from '../Common/virusData';
 import { SoundManager } from '../Common/SoundManager';
 
+// <script src="https://game-connector.s3.ap-south-1.amazonaws.com/gameConnector.js"> </script> </script>
+
 @ccclass('GamePlay')
 export class GamePlay extends Component {
     
@@ -88,6 +90,11 @@ export class GamePlay extends Component {
 
         this.startLevel(1);
         this.createCoins();
+
+        let gp=new GamePlay("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
+
+        let data:any = gp.OnGameStart();
+        console.log(JSON.stringify(data));
     }
 
     startLevel(levelNum:number){
@@ -326,6 +333,8 @@ export class GamePlay extends Component {
                 .call(()=>{
                     this.congratulationLayer.node.active = false;
                     this.congratulationLayer.node.getChildByName('text')!.getComponent(Animation)?.stop();
+
+                    this.showStarAnimation();
                 })
                 .start();
             }
@@ -360,8 +369,9 @@ export class GamePlay extends Component {
         nextButton.active = true;
 
         this.gameOverLayer.node.active = true;
+
+        // this.showStarAnimation();
     }
-    // if(this.virusArray.length>0)
     updateGameOverLayer(){
           
         let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
@@ -377,8 +387,51 @@ export class GamePlay extends Component {
         nextButton.active = false;
 
         this.gameOverLayer.node.active = true;
-    }
 
+        this.showStarAnimation();
+    }
+    showStarAnimation(){
+        let star1:Node|any = this.gameOverLayer.node.getChildByName("star1");
+        let star2:Node|any = this.gameOverLayer.node.getChildByName("star2");
+        let star3:Node|any = this.gameOverLayer.node.getChildByName("star3");
+
+        star1.active = false;
+        star2.active = false;
+        star3.active = false;
+
+        let star:Node|any = star1;
+
+        let repeatNum = 3 - this.miss;
+        let starCount = 1;
+
+        tween(this.bg)
+        .call(()=>{
+            if(starCount ==1){
+                star = star1;
+            }
+            else if(starCount ==2){
+                star = star2;
+            }
+            else if(starCount ==3){
+                star = star3;
+                
+            }
+            console.log("animation played ",star);
+            star.active = true;
+            star.angle = 0;
+            tween(star)
+            .to(0,{scale : new Vec3(4,4,4)})
+            .to(0.5,{angle : 360, scale : new Vec3(1,1,1)})
+            .start();
+
+            // star.getComponent(Animation)?.play();
+            starCount++;
+        })
+        .delay(0.5)
+        .union()
+        .repeat(repeatNum)
+        .start();
+    }
     breakAndBurnVirus(virusData:virus){
 
         let point:number = getVirusPoints(virusData.type!) * this.coinMultiplyFactor;
@@ -645,6 +698,7 @@ export class GamePlay extends Component {
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
             touchRestriction.active = false;
             this.rewardLayer.node.active = false;
+            this.showStarAnimation();
         }
     }
 
@@ -658,16 +712,8 @@ export class GamePlay extends Component {
 
         tween(this.message.node)
         .to(0.2, { scale: new Vec3(1,1,1) })
-        .delay(0.4)
+        .delay(0.7)
         .to(0.2, { scale: new Vec3(0,0,0) })
         .start();
     }
-
-//     Kill Them All 
-// What Shot!!
-// Killer Shot, Keep Going!!
-// Ohh, You missed It..
-// Keep Trying, Kill them all.
-// Awesome Kill.
-
 }

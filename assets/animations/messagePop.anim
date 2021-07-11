@@ -99,8 +99,8 @@
           "values": [
             {
               "__type__": "cc.Vec3",
-              "x": 5,
-              "y": 5,
+              "x": 3,
+              "y": 3,
               "z": 1
             },
             {
@@ -173,7 +173,7 @@
       }
     ],
     "_commonTargets": [],
-    "_hash": 1356144491
+    "_hash": 2002870231
   },
   {
     "__type__": "cc.animation.HierarchyPath",
