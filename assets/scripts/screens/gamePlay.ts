@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator;
 import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints,getVirusAnimationName,getVirusDestroyAnimationName} from '../Common/virusData';
 import { SoundManager } from '../Common/SoundManager';
 
-// <script src="https://game-connector.s3.ap-south-1.amazonaws.com/gameConnector.js"> </script> </script>
+// <script src="https://game-connector.s3.ap-south-1.amazonaws.com/BlaashGameSDK.js"> </script> </script>
 
 @ccclass('GamePlay')
 export class GamePlay extends Component {
@@ -90,11 +90,6 @@ export class GamePlay extends Component {
 
         this.startLevel(1);
         this.createCoins();
-
-        let gp=new GamePlay("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
-
-        let data:any = gp.OnGameStart();
-        console.log(JSON.stringify(data));
     }
 
     startLevel(levelNum:number){
@@ -104,8 +99,9 @@ export class GamePlay extends Component {
         this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
         
         if(this.maxLevel < levelNum){
-            console.log("Maximum Level reached");
-            return;
+            // console.log("Maximum Level reached");
+            // return;
+            levelNum = 1;
         }
         this.level = levelNum;
         this.touchEvents();
@@ -369,6 +365,10 @@ export class GamePlay extends Component {
         nextButton.active = true;
 
         this.gameOverLayer.node.active = true;
+
+        if(this.levelData.bonusLevel){
+            this.injectionCount.removeAllChildren();
+        }
 
         // this.showStarAnimation();
     }
