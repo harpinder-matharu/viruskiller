@@ -404,33 +404,36 @@ export class GamePlay extends Component {
         let repeatNum = 3 - this.miss;
         let starCount = 1;
 
-        tween(this.bg)
-        .call(()=>{
-            if(starCount ==1){
-                star = star1;
-            }
-            else if(starCount ==2){
-                star = star2;
-            }
-            else if(starCount ==3){
-                star = star3;
-                
-            }
-            console.log("animation played ",star);
-            star.active = true;
-            star.angle = 0;
-            tween(star)
-            .to(0,{scale : new Vec3(4,4,4)})
-            .to(0.5,{angle : 360, scale : new Vec3(1,1,1)})
-            .start();
+        if(repeatNum > 0){
+            tween(this.bg)
+            .call(()=>{
+                if(starCount ==1){
+                    star = star1;
+                }
+                else if(starCount ==2){
+                    star = star2;
+                }
+                else if(starCount ==3){
+                    star = star3;
+                    
+                }
+                console.log("animation played ",star);
+                star.active = true;
+                star.angle = 0;
+                tween(star)
+                .to(0,{scale : new Vec3(4,4,4)})
+                .to(0.5,{angle : 360, scale : new Vec3(1,1,1)})
+                .start();
 
-            // star.getComponent(Animation)?.play();
-            starCount++;
-        })
-        .delay(0.5)
-        .union()
-        .repeat(repeatNum)
-        .start();
+                // star.getComponent(Animation)?.play();
+                starCount++;
+            })
+            .delay(0.5)
+            .union()
+            .repeat(repeatNum)
+            .start();
+        }
+        
     }
     breakAndBurnVirus(virusData:virus){
 
