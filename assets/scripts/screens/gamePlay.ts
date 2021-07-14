@@ -53,7 +53,6 @@ export class GamePlay extends Component {
     @property(Sprite)    gameOverLayer :Sprite = null!;
     @property(Sprite)    congratulationLayer :Sprite = null!;
     @property(Sprite)    rewardLayer :Sprite = null!;
-    @property(Sprite)    fireAnimation :Sprite = null!;
     @property(Sprite)    confettieAnimation :Sprite = null!;
     @property(Sprite)    progressbar:Sprite = null!;
 
@@ -80,7 +79,7 @@ export class GamePlay extends Component {
     @property(AudioClip)    syringeFly : AudioClip = null!;
 
     start () {
-        this.initBlaashGameSDK();
+        // this.initBlaashGameSDK();
 
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.gameOverLayer.node.active = false;
@@ -97,7 +96,7 @@ export class GamePlay extends Component {
         this.startLevel(1);
         this.createCoins();
         
-        this.onGameStart();
+        //this.onGameStart();
     }
 
     startLevel(levelNum:number){
@@ -126,7 +125,7 @@ export class GamePlay extends Component {
         }
 
         this.schedule(this.checkCollision, 0.001);
-        console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
+        // console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
     updateSyringeType(){ 
@@ -139,7 +138,7 @@ export class GamePlay extends Component {
             this.setInjectionCount();
         }
 
-        console.log("i tyep "+this.coinMultiplyFactor);
+        // console.log("i tyep "+this.coinMultiplyFactor);
     }
 
     resetScene(){
@@ -248,7 +247,7 @@ export class GamePlay extends Component {
         });
 
         this.totalLevelPoints = this.totalLevelPoints * this.coinMultiplyFactor;
-        console.log("Points "+this.totalLevelPoints);
+        // console.log("Points "+this.totalLevelPoints);
     }
 
     updateLevelNum(){
@@ -266,7 +265,7 @@ export class GamePlay extends Component {
         this.injectionCount.getComponent(UITransform)?.setContentSize(new Size(width,height)); 
 
         for(let i=1;i<this.injectionsLeft;i++){
-            console.log("Adding injection");
+            // console.log("Adding injection");
             spareArrow = instantiate(this.arrowPrefab);
             spareArrow.getComponent(UITransform)!.setAnchorPoint(new Vec2(0,0));
             spareArrow.setScale(new Vec3(scale,scale,scale));
@@ -306,7 +305,7 @@ export class GamePlay extends Component {
         if(this.virusArray.length>0){
             this.virusArray.forEach((virusData,index,aar) =>{
                 if (this.checkArrowIntersectWith(virusData.virus)){
-                    console.log("Collision");
+                    // console.log("Collision");
                     this.virusesDistroyedInOneShot++;
                     SoundManager.getInstance().playSoundEffect(this.blast);
                     this.breakAndBurnVirus(virusData);
@@ -322,7 +321,7 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            if(this.RewardLevel /*== this.level*/){
+            if(this.RewardLevel == this.level){
                 if(Math.floor(Math.random() * 2) == 1){
                     this.rewardLayer.node.active = true;
                 } 
@@ -330,7 +329,7 @@ export class GamePlay extends Component {
                     tween(this.bg)
                     .call(()=>{
                         this.cuponDiscount.string = this.RewardText;
-                        this.onCompleteReward(this.RewardID);
+                        //this.onCompleteReward(this.RewardID);
 
                         this.congratulationLayer.node.active = true;
                         this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
@@ -356,7 +355,7 @@ export class GamePlay extends Component {
     onNext(){
         this.stopConfettie();
         this.gameOverLayer.node.active = false;
-        console.log("Level Complete, Move to next Level");
+        // console.log("Level Complete, Move to next Level");
         this.resetScene();
         this.level++
         this.startLevel(this.level);
@@ -369,7 +368,7 @@ export class GamePlay extends Component {
 
     updateGameWinLayer(){
 
-        this.onLevelComplete(this.level,parseInt(this.levelScore.string));
+        //this.onLevelComplete(this.level,parseInt(this.levelScore.string));
 
         let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
         levelNumber.string = String("LEVEL "+this.level);
@@ -393,7 +392,7 @@ export class GamePlay extends Component {
     }
     updateGameOverLayer(){
           
-        this.onGameOver(this.level,parseInt(this.levelScore.string));
+        //this.onGameOver(this.level,parseInt(this.levelScore.string));
 
         let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
         levelNumber.string = String("LEVEL "+this.level);
@@ -438,7 +437,7 @@ export class GamePlay extends Component {
                     star = star3;
                     
                 }
-                console.log("animation played ",star);
+                // console.log("animation played ",star);
                 star.active = true;
                 star.angle = 0;
                 tween(star)
@@ -482,7 +481,7 @@ export class GamePlay extends Component {
         this.bg.node.addChild(virusBlastAnimation);
         
         virusBlastAnimation.getComponent(Animation)?.play(getVirusDestroyAnimationName(virusData.type!));
-        this.fireAnimation.getComponent(Animation)?.play();
+        this.bonfire.getComponent(Animation)?.play();
         
         tween(virusBlastAnimation)
         .to(0.5,{position:this.bonfire.node.position})
@@ -563,8 +562,9 @@ export class GamePlay extends Component {
     }
     itemTouchStartCallback(event: { getUILocation: () => any; }){
         var eventLocation = event.getUILocation();
+
         let touchPointOnBg = this.bg!.getComponent(UITransform)?.convertToNodeSpaceAR(v3(eventLocation.x, eventLocation.y,0)); 
-        
+        // console.log(" Touched" , eventLocation.x, eventLocation.y);
         if(this.arrow!.getComponent(UITransform)?.getBoundingBox().contains(v2(touchPointOnBg!.x, touchPointOnBg!.y))){
             // arrow touched  
 
@@ -573,7 +573,7 @@ export class GamePlay extends Component {
             }
             this.virusesDistroyedInOneShot = 0;  
             this.arrowTouchBeganPoint = eventLocation;
-            console.log("Arrow Touched");
+            // console.log("Arrow Touched");
             this.canAccessArrow = true;
         }   
     }
@@ -639,7 +639,7 @@ export class GamePlay extends Component {
                         this.resetSyringePosition();
                     }
     
-                    console.log(`MISS : ${this.miss}, Collisions : ${this.virusesDistroyedInOneShot}`);
+                    // console.log(`MISS : ${this.miss}, Collisions : ${this.virusesDistroyedInOneShot}`);
                 }
             })
             .start();
@@ -654,11 +654,12 @@ export class GamePlay extends Component {
         this.startLevel(this.level);
     }
     onGoToHome(){
-        director.loadScene("landingScene");
+        this.node.active = false;
+        // director.loadScene("landingScene");
     }
     onRevive(){
 
-        this.onGameRevive();
+        //this.onGameRevive();
         
         this.miss = 0;
         this.gameOverLayer.node.active = false;
@@ -704,8 +705,8 @@ export class GamePlay extends Component {
     }
 
     onRewardButton(event:any,  customEventData:any){
-        console.log(event, customEventData);
-        console.log(event.target);
+        // console.log(event, customEventData);
+        // console.log(event.target);
 
         if(customEventData!="close"){
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
@@ -715,7 +716,7 @@ export class GamePlay extends Component {
             event.target.addChild(this.rewardBox);
             this.rewardBox.setPosition(new Vec3(0,80,0));
             this.rewardBox.getComponent("GiftBox")!.playAnimation(this.RewardText);
-            this.onCompleteReward(this.RewardID);
+            //this.onCompleteReward(this.RewardID);
             // event.target.getChildByName("gift").active = true;
         }else{
             if(this.rewardBox){
@@ -731,7 +732,7 @@ export class GamePlay extends Component {
     }
 
     onSyringeButton(){
-        console.log("Select Injections");
+        // console.log("Select Injections");
         this.selectInjection.active = true;
     }
 

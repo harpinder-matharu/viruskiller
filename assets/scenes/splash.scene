@@ -417,7 +417,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 477.4680000000001,
+      "y": 340.976,
       "z": 0
     },
     "_lrot": {
@@ -521,7 +521,7 @@
     "_target": null,
     "_left": 0,
     "_right": 0,
-    "_top": 0.21902708333333332,
+    "_top": 0.2901166666666667,
     "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
@@ -561,7 +561,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 214.519,
+      "y": -135.81299999999996,
       "z": 0
     },
     "_lrot": {
@@ -573,9 +573,9 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
+      "x": 1.434,
+      "y": 1.434,
+      "z": 1.434
     },
     "_layer": 33554432,
     "_euler": {
@@ -674,7 +674,7 @@
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
-    "_verticalCenter": 0.11172864583333333,
+    "_verticalCenter": -0.07073593749999998,
     "_isAbsLeft": true,
     "_isAbsRight": true,
     "_isAbsTop": true,
@@ -699,7 +699,7 @@
         "__id__": 23
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 28
@@ -1120,8 +1120,8 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "progressbar": {
-      "__id__": 26
+    "gameName": {
+      "__id__": 16
     },
     "_id": "4dMpwlHkZEcrcwnsn2MruG"
   },
