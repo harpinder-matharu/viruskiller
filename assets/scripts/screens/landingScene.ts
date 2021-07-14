@@ -1,7 +1,8 @@
 
-import { _decorator, Component, Node, director, Toggle, instantiate, Sprite, ProgressBar, Prefab } from 'cc';
+import { _decorator, Component, Node, director, Toggle, instantiate, Sprite, ProgressBar, Prefab, AudioSource } from 'cc';
 import { gameManager } from '../Common/gameManager';
 import { ResourceUtils } from '../Common/ResourceUtils';
+import { SoundManager } from '../Common/SoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('LandingScene')
@@ -21,6 +22,7 @@ export class LandingScene extends Component {
     homeScene : any;
 
     start () {
+        SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.settingLayer.active = false;
         this.playButton.active = false;
 
@@ -42,6 +44,12 @@ export class LandingScene extends Component {
             this.currentGame = instantiate(prefab);
             this.currentGame.active = false;
             this.node.addChild( this.currentGame);
+
+            let clip = ResourceUtils.getInstance().getGameResources("virusKiller", "music");
+            if(clip){
+                this.node.getComponent(AudioSource)!.clip = clip;
+                SoundManager.getInstance().playMusic(true);
+            }
             
             clearInterval(interval);
             this.progressbar.fillRange = 100;

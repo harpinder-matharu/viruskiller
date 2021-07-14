@@ -15,7 +15,7 @@ export class GamePlay extends Component {
     coinMultiplyFactor:number=0;
 
     level:number = 0;
-    maxLevel:number = 7;
+    maxLevel:number = 20;
     totalLevelPoints:number = 0;
     APIObject:any;
     RewardID:number = 0;
@@ -93,7 +93,7 @@ export class GamePlay extends Component {
         let selectInjectionScript:any = this.selectInjection.getComponent("ChooseInjection");
         selectInjectionScript!.setDelegate(this);
 
-        this.startLevel(1);
+        this.startLevel(14);
         this.createCoins();
         
         //this.onGameStart();
