@@ -393,9 +393,9 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
+            if(true||gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
                 
-                if(Math.floor(Math.random() * 2) == 1){
+                if(true||Math.floor(Math.random() * 2) == 1){
                     this.rewardLayer.node.active = true;
                 } 
                 else{
@@ -799,11 +799,16 @@ export class GamePlay extends Component {
         if(customEventData!="close"){
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
             touchRestriction.active = true;
+            // letBg greyBg:any = this.rewardLayer.node!.getChildByName("GreyBg");
+            // grey.active = true;
+
             this.rewardBox = instantiate(this.giftBox);
             
             this.rewardLayer.node.addChild(this.rewardBox);
             this.rewardBox.setPosition(new Vec3(0,0,0));
             this.rewardBox.getComponent("GiftBox")!.playAnimation(gameManager.getInstance().getRewardDetails().RewardText);
+
+            this.rewardBox.getChildByName('text')!.getComponent(Animation)?.play();
 
             if(this.enableAPIs){
                 this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
@@ -818,6 +823,10 @@ export class GamePlay extends Component {
             
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
             touchRestriction.active = false;
+            
+            // let greyBg:any = this.rewardLayer.node!.getChildByName("GreyBg");
+            // greyBg.active = false;
+
             this.rewardLayer.node.active = false;
             this.showStarAnimation();
         }
