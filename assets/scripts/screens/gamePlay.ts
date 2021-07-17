@@ -393,9 +393,9 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            if(true||gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
+            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
                 
-                if(true||Math.floor(Math.random() * 2) == 1){
+                if(Math.floor(Math.random() * 2) == 1){
                     this.rewardLayer.node.active = true;
                 } 
                 else{

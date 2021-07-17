@@ -82,6 +82,10 @@ export class LandingScene extends Component {
         
         console.log(!this.music.isChecked, !this.sound.isChecked);
         this.settingLayer.active = false;
+
+        if(this.music.isChecked){
+            SoundManager.getInstance().stopMusic();
+        }
     }
 
 
