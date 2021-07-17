@@ -2,7 +2,7 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "ba710d23-ea15-4993-98d3-79be4bb129f2",
+  "uuid": "e229ed2c-726c-496a-8977-78ef1c29d359",
   "files": [
     ".png",
     ".json"
@@ -10,8 +10,8 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "ba710d23-ea15-4993-98d3-79be4bb129f2@6c48a",
-      "displayName": "syringe-6",
+      "uuid": "e229ed2c-726c-496a-8977-78ef1c29d359@6c48a",
+      "displayName": "rotator2",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "ba710d23-ea15-4993-98d3-79be4bb129f2"
+        "imageUuidOrDatabaseUri": "e229ed2c-726c-496a-8977-78ef1c29d359"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,29 +33,29 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "ba710d23-ea15-4993-98d3-79be4bb129f2@f9941",
-      "displayName": "syringe-6",
+      "uuid": "e229ed2c-726c-496a-8977-78ef1c29d359@f9941",
+      "displayName": "rotator2",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
-        "trimType": "none",
+        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 82,
-        "height": 591,
-        "rawWidth": 82,
-        "rawHeight": 591,
+        "width": 1050,
+        "height": 1050,
+        "rawWidth": 1050,
+        "rawHeight": 1050,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "ba710d23-ea15-4993-98d3-79be4bb129f2@6c48a",
+        "imageUuidOrDatabaseUri": "e229ed2c-726c-496a-8977-78ef1c29d359@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "hasAlpha": true,
     "type": "sprite-frame",
-    "redirect": "ba710d23-ea15-4993-98d3-79be4bb129f2@f9941"
+    "redirect": "e229ed2c-726c-496a-8977-78ef1c29d359@f9941"
   }
 }

@@ -21,6 +21,7 @@ export class GamePlay extends Component {
     maxLevel:number = 20;
     totalLevelPoints:number = 0;
     APIObject:any;
+    
     RewardID:number = 0;
     RewardLevel:number = 0;
     RewardText:string = "0";
@@ -86,6 +87,10 @@ export class GamePlay extends Component {
 
     start () {
         
+        if(gameManager.getInstance().getToken()){
+            this.enableAPIs = true;
+        }
+
         if(this.enableAPIs){
             this.initBlaashGameSDK();
         }
@@ -113,11 +118,14 @@ export class GamePlay extends Component {
 
     startLevel(levelNum:number){
 
-        if(this.level%2 ==0)
-            this.bonusLevel = true;
-        else{
-            this.bonusLevel = false;
+
+        if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
+            if(Math.floor(Math.random() * 2))
+                this.bonusLevel = true;
         }
+        // else{
+        //     this.bonusLevel = false;
+        // }
 
         this.miss = 0;
         this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
@@ -134,7 +142,7 @@ export class GamePlay extends Component {
         this.setUpViruses();
         this.setUpInitialSyringe();
         this.rotateRotator();
-
+        this.enableAllToggleInjections();
         if(this.bonusLevel){
             this.setInjectionCount();
             this.showMessage("Bonus Level!");
@@ -385,7 +393,7 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            if(this.RewardLevel == this.level){
+            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
                 
                 if(Math.floor(Math.random() * 2) == 1){
                     this.rewardLayer.node.active = true;
@@ -395,7 +403,7 @@ export class GamePlay extends Component {
                     .call(()=>{
                         this.cuponDiscount.string = this.RewardText;
                         if(this.enableAPIs){
-                            this.onCompleteReward(this.RewardID);
+                            this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
                         }
                         
 
@@ -421,6 +429,12 @@ export class GamePlay extends Component {
     }
 
     onNext(){
+
+        if(this.bonusLevel){
+
+            this.bonusLevel = false;
+            this.injectionCount.removeAllChildren();
+        }
         this.stopConfettie();
         this.gameOverLayer.node.active = false;
         // console.log("Level Complete, Move to next Level");
@@ -460,7 +474,7 @@ export class GamePlay extends Component {
 
         if(this.bonusLevel){
 
-            this.bonusLevel = false;
+        //     this.bonusLevel = false;
             this.injectionCount.removeAllChildren();
         }
     }
@@ -734,7 +748,6 @@ export class GamePlay extends Component {
         this.gameOverLayer.node.active = false;
         this.resetScene();
         this.startLevel(this.level);
-        this.enableAllToggleInjections();
     }
     onGoToHome(){
         this.node.active = false;
@@ -793,7 +806,7 @@ export class GamePlay extends Component {
             this.rewardBox.getComponent("GiftBox")!.playAnimation(this.RewardText);
 
             if(this.enableAPIs){
-                this.onCompleteReward(this.RewardID);
+                this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
             }
             
             // event.target.getChildByName("gift").active = true;
@@ -835,7 +848,9 @@ export class GamePlay extends Component {
 //API CALLS
 
     initBlaashGameSDK(){
-        this.APIObject = new BlaashGameSDK("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
+        // this.APIObject = new BlaashGameSDK("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
+
+        this.APIObject = new BlaashGameSDK(gameManager.getInstance().getToken());
     }
 
     onGameStart(){
@@ -844,11 +859,12 @@ export class GamePlay extends Component {
             console.log('onGameStart executed: ');
             console.log(val);
 
-            this.RewardID = val.RewardID;
-            this.RewardLevel = val.RewardLevel;
-            this.RewardText = val.RewardText;
+            // this.RewardID = val.RewardID;
+            // this.RewardLevel = val.RewardLevel;
+            // this.RewardText = val.RewardText;
+            gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
 
-            console.log(this.RewardID,this.RewardLevel);
+            console.log(val.RewardID,val.RewardLevel,val.RewardText);
 
           }).catch((err:any) => {
             console.log('onGameStart executed: ' + err);
@@ -863,9 +879,12 @@ export class GamePlay extends Component {
             console.log('onCompleteReward executed: ');
             console.log(val);
 
-            this.RewardID = val.RewardID;
-            this.RewardLevel = val.RewardLevel;
-            this.RewardText = val.RewardText;
+            // this.RewardID = val.RewardID;
+            // this.RewardLevel = val.RewardLevel;
+            // this.RewardText = val.RewardText;
+            gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
+
+            console.log(val.RewardID,val.RewardLevel,val.RewardText);
             
         }).catch((err:any) => {
             console.log('onCompleteReward executed: ' + err);
@@ -879,9 +898,12 @@ export class GamePlay extends Component {
         prom5.then((val:any)=> {
             console.log('onGameRevive executed: ');
             console.log(val);
-            this.RewardID = val.RewardID;
-            this.RewardLevel = val.RewardLevel;
-            this.RewardText = val.RewardText;
+            // this.RewardID = val.RewardID;
+            // this.RewardLevel = val.RewardLevel;
+            // this.RewardText = val.RewardText;
+            gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
+
+            console.log(val.RewardID,val.RewardLevel,val.RewardText);
         }).catch((err:any) => {
             console.log('onGameRevive executed: ' + err);
         }).finally(() => {

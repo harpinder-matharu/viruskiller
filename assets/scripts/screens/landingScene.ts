@@ -21,7 +21,19 @@ export class LandingScene extends Component {
 
     homeScene : any;
 
+    enableAPIs :Boolean = false;
+    APIObject:any;
+
     start () {
+
+        if(gameManager.getInstance().getToken()){
+            this.enableAPIs = true;
+        }
+        if(this.enableAPIs){
+            this.initBlaashGameSDK();
+            this.onGameStart();
+        }
+
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.settingLayer.active = false;
         this.playButton.active = false;
@@ -61,16 +73,6 @@ export class LandingScene extends Component {
         .catch((error)=>{
         console.log("error while laoding game data",  error);
         });
-        
-        // director.preloadScene("gamePlay",(err,scene)=>{
-        //     console.log("gamePlay scene loaded");
-        //     clearInterval(interval);
-            
-        //     this.progressbar.fillRange = 100;
-        //     this.progressbar.node.active = false;
-        //     this.progressbarBg.node.active = false;
-        //     this.playButton.active = true;
-        // });
     }
 
 
@@ -93,10 +95,29 @@ export class LandingScene extends Component {
         this.currentGame.active = true;
     }
 
-    onEducation(){
-        let prefab = ResourceUtils.getInstance().getGamePrefab("Education" );
-        this.currentGame = instantiate(prefab);
-        this.currentGame.active = false;
-        this.node.addChild( this.currentGame);
+    initBlaashGameSDK(){
+        // this.APIObject = new BlaashGameSDK("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
+
+        this.APIObject = new BlaashGameSDK(gameManager.getInstance().getToken());
+    }
+
+    onGameStart(){
+        let prom1 =  this.APIObject.onGameStart();
+        prom1.then((val:any)=> {
+            console.log('onGameStart executed: ');
+            console.log(val);
+
+            gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
+            // this.RewardID = val.RewardID;
+            // this.RewardLevel = val.RewardLevel;
+            // this.RewardText = val.RewardText;
+
+            console.log(val.RewardID,val.RewardLevel,val.RewardText);
+
+          }).catch((err:any) => {
+            console.log('onGameStart executed: ' + err);
+          }).finally(() => {
+            console.log('onGameStart done executing');
+          });
     }
 }

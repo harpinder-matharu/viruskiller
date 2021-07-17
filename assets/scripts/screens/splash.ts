@@ -1,5 +1,6 @@
 
 import { _decorator, Component, Node,director, Sprite, tween, Vec3 } from 'cc';
+import { gameManager } from '../Common/gameManager';
 import { ResourceUtils } from '../Common/ResourceUtils';
 const { ccclass, property } = _decorator;
 
@@ -12,7 +13,15 @@ export class SplashScreen extends Component {
 
     start () {
         
-        
+        var parameters  =   new URL(window.location.toString()).searchParams;
+        var token       =   parameters.get("token");
+        if(token){
+            gameManager.getInstance().setToken(token!);
+        }
+        else{
+            gameManager.getInstance().setToken("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
+        }
+
 
         
         tween(this.gameName)

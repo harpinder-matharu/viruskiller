@@ -30,6 +30,9 @@ export class gameManager{
     sceneType: SCENE_TYPE = SCENE_TYPE.NONE;
     syringeType: SYRINGE_TYPE = SYRINGE_TYPE.TYPE1;
     coins : number = 0;
+    token : string = null!;
+
+    rewardDetails: { RewardID: number; RewardLevel: number; RewardText: string } = null!;
 
     music : boolean = true;
     sound : boolean = true;
@@ -52,6 +55,25 @@ export class gameManager{
     }
     getMusic(){
         return this.music;
+    }
+
+    setToken(token:string){
+        this.token = token;
+    }
+    getToken(){
+        return this.token;
+    }
+
+    setRewardDetails(RewardID: number, RewardLevel: number, RewardText: string){
+        this.rewardDetails.RewardID = RewardID;
+        this.rewardDetails.RewardLevel = RewardLevel;
+        this.rewardDetails.RewardText = RewardText;
+        console.log(JSON.stringify(this.rewardDetails));
+    }
+
+    getRewardDetails(){
+        console.log(JSON.stringify(this.rewardDetails));
+        return this.rewardDetails;
     }
 
     setSound(sound:boolean){
