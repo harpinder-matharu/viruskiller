@@ -181,9 +181,18 @@
         "__uuid__": "34d0dda5-283e-426f-8140-4680b86b85f5",
         "__expectedType__": "cc.AnimationClip"
       },
-      null,
-      null,
-      null,
+      {
+        "__uuid__": "9d0e0837-34b5-4304-a86d-2721a0c86a87",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "c115045d-e80e-480e-bb43-0d58d12c90b5",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "2c8d4620-9e63-4b6c-a045-426097d8a738",
+        "__expectedType__": "cc.AnimationClip"
+      },
       {
         "__uuid__": "8b9e64b9-77b9-40cc-8af5-918e0c4bcfae",
         "__expectedType__": "cc.AnimationClip"
