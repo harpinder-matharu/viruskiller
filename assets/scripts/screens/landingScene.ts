@@ -106,13 +106,13 @@ export class LandingScene extends Component {
         prom1.then((val:any)=> {
             console.log('onGameStart executed: ');
             console.log(val);
-
+            console.log("Info : ",val.RewardID,val.RewardLevel,val.RewardText);
             gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
             // this.RewardID = val.RewardID;
             // this.RewardLevel = val.RewardLevel;
             // this.RewardText = val.RewardText;
 
-            console.log(val.RewardID,val.RewardLevel,val.RewardText);
+            
 
           }).catch((err:any) => {
             console.log('onGameStart executed: ' + err);

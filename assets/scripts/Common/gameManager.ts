@@ -32,7 +32,8 @@ export class gameManager{
     coins : number = 0;
     token : string = null!;
 
-    rewardDetails: { RewardID: number; RewardLevel: number; RewardText: string } = null!;
+    rewardDetails: { RewardID: number; RewardLevel: number; RewardText: string } =
+    {RewardID:0,RewardLevel:0,RewardText:""};
 
     music : boolean = true;
     sound : boolean = true;
@@ -68,7 +69,7 @@ export class gameManager{
         this.rewardDetails.RewardID = RewardID;
         this.rewardDetails.RewardLevel = RewardLevel;
         this.rewardDetails.RewardText = RewardText;
-        console.log(JSON.stringify(this.rewardDetails));
+        console.log("yoyoy :",JSON.stringify(this.rewardDetails));
     }
 
     getRewardDetails(){

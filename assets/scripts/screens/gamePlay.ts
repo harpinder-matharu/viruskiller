@@ -401,7 +401,7 @@ export class GamePlay extends Component {
                 else{
                     tween(this.bg)
                     .call(()=>{
-                        this.cuponDiscount.string = this.RewardText;
+                        this.cuponDiscount.string = gameManager.getInstance().getRewardDetails().RewardText;
                         if(this.enableAPIs){
                             this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
                         }
@@ -803,7 +803,7 @@ export class GamePlay extends Component {
             
             this.rewardLayer.node.addChild(this.rewardBox);
             this.rewardBox.setPosition(new Vec3(0,0,0));
-            this.rewardBox.getComponent("GiftBox")!.playAnimation(this.RewardText);
+            this.rewardBox.getComponent("GiftBox")!.playAnimation(gameManager.getInstance().getRewardDetails().RewardText);
 
             if(this.enableAPIs){
                 this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
