@@ -114,6 +114,8 @@ export class GamePlay extends Component {
         if(this.enableAPIs){
             this.onGameStart();
         }
+
+        this.bonfire.getComponent(Animation)?.play();
     }
 
     startLevel(levelNum:number){
@@ -143,9 +145,13 @@ export class GamePlay extends Component {
         this.setUpInitialSyringe();
         this.rotateRotator();
         this.enableAllToggleInjections();
+        
         if(this.bonusLevel){
             this.setInjectionCount();
             this.showMessage("Bonus Level!");
+        }
+        else{
+            this.showMessage("Kill Them All!");
         }
 
         this.schedule(this.checkCollision, 0.001);
@@ -196,9 +202,9 @@ export class GamePlay extends Component {
             this.arrow.removeFromParent();
 
         this.arrow = instantiate(this.arrowPrefab);
-        let scale = this.bg.getComponent(UITransform)?.contentSize.height!  * 0.2/this.arrow.getComponent(UITransform)?.contentSize.height!;
+        let scale = this.bg.getComponent(UITransform)?.contentSize.height!  * 0.25/this.arrow.getComponent(UITransform)?.contentSize.height!;
         this.arrow.setScale(new Vec3(scale,scale,scale));
-        this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.3 *-1;
+        this.arrow.position.y = this.bg.getComponent(UITransform)?.contentSize.height! * 0.35 *-1;
         this.arrow.position.x = 0;
         this.bg.node.addChild(this.arrow);
 
@@ -350,11 +356,11 @@ export class GamePlay extends Component {
         tween(this.rotator.node)
         .repeatForever(
             tween()
-            .by(Math.floor(Math.random() * 1)+ 2, {  angle : 360})
-            .by(Math.floor(Math.random() * 2)+ 2, {  angle : 360})
-            .by(Math.floor(Math.random() * 1)+ 2, {  angle : 10})
-            .by(Math.floor(Math.random() * 2)+ 2, {  angle : -360})
-            .by(Math.floor(Math.random() * 1)+ 2, {  angle : -360})
+            .by(Math.floor(Math.random() * 1)+ 2.5, {  angle : 360})
+            .by(Math.floor(Math.random() * 2)+ 2.5, {  angle : 360})
+            .by(Math.floor(Math.random() * 1)+ 2.5, {  angle : 10})
+            .by(Math.floor(Math.random() * 2)+ 2.5, {  angle : -360})
+            .by(Math.floor(Math.random() * 1)+ 2.5, {  angle : -360})
         )
         .start();
     }
@@ -393,7 +399,7 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
+            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.levelCount){
                 
                 if(Math.floor(Math.random() * 2) == 1){
                     this.rewardLayer.node.active = true;
@@ -454,12 +460,12 @@ export class GamePlay extends Component {
         //console.log("Check 2");
 
         if(this.enableAPIs){
-            this.onLevelComplete(this.level,parseInt(this.levelScore.string));
+            this.onLevelComplete(this.levelCount,parseInt(this.levelScore.string));
         }
         
 
         let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
-        levelNumber.string = String("LEVEL "+this.level);
+        levelNumber.string = String("LEVEL "+this.levelCount);
 
         let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
         scoreValue.string = String(this.levelScore.string);
@@ -481,12 +487,12 @@ export class GamePlay extends Component {
     updateGameOverLayer(){
           
         if(this.enableAPIs){
-            this.onGameOver(this.level,parseInt(this.levelScore.string));
+            this.onGameOver(this.levelCount,parseInt(this.levelScore.string));
         }
         
 
         let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
-        levelNumber.string = String("LEVEL "+this.level);
+        levelNumber.string = String("LEVEL "+this.levelCount);
 
         let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
         scoreValue.string = String(this.levelScore.string);
@@ -576,7 +582,7 @@ export class GamePlay extends Component {
         this.bg.node.addChild(virusBlastAnimation);
         
         virusBlastAnimation.getComponent(Animation)?.play(getVirusDestroyAnimationName(virusData.type!));
-        this.bonfire.getComponent(Animation)?.play();
+        // this.bonfire.getComponent(Animation)?.play();
         
         tween(virusBlastAnimation)
         .to(0.5,{position:this.bonfire.node.position})
@@ -837,7 +843,9 @@ export class GamePlay extends Component {
     showMessage(message: string){
         this.message.string = message;
         tween(this.message.node)
-        .to(0.2, { scale: new Vec3(1,1,1) }).delay(0.7).to(0.2, { scale: new Vec3(0,0,0) })
+        .to(0.2, { scale: new Vec3(1,1,1) })
+        .delay(1)
+        .to(0.2, { scale: new Vec3(0,0,0) })
         .start();
     }
     showRedWarning(){
@@ -921,10 +929,12 @@ export class GamePlay extends Component {
     }
     
     onLevelComplete(level:number,score:number){
+        console.log("Data Sent: ",level, score);
         this.APIObject.onLevelComplete(level, score);
     }
 
     onGameOver(level:number,score:number){
+        console.log("Data Sent: ",level, score);
         this.APIObject.onGameOver(level, score);
     }
 

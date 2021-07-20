@@ -1,3 +1,13 @@
 {
-  "__version__": "1.2.8"
+  "__version__": "1.2.8",
+  "splash-setting": {
+    "url": "project://assets/textures/ScreenAssets/home-screen/blaash-logo.png",
+    "clearColor": {
+      "x": 0.33725490196078434,
+      "y": 0.7529411764705882,
+      "z": 1,
+      "w": 1
+    },
+    "totalTime": 0
+  }
 }
