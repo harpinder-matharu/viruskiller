@@ -18,6 +18,10 @@ export class LandingScene extends Component {
     @property(Node) playButton : Node = null!;
     
     currentGame:Prefab|any  = null!;
+    interval:any;
+
+    initialDataFetched :Boolean = false;
+    initialResourcesFetched :Boolean = false;
 
     homeScene : any;
 
@@ -39,7 +43,7 @@ export class LandingScene extends Component {
         this.playButton.active = false;
 
         let time = 0;
-        let interval = setInterval(()=>{
+        this.interval = setInterval(()=>{
         time += 100;
         
         if(this.progressbar){
@@ -63,16 +67,24 @@ export class LandingScene extends Component {
                 SoundManager.getInstance().playMusic(true);
             }
             
-            clearInterval(interval);
-            this.progressbar.fillRange = 100;
-            this.progressbar.node.active = false;
-            this.progressbarBg.node.active = false;
-            this.playButton.active = true;
+            this.initialResourcesFetched = true;
         
         })
         .catch((error)=>{
         console.log("error while laoding game data",  error);
         });
+
+        this.schedule(this.checkAllDataFetched,1);
+    }
+
+    checkAllDataFetched(){
+        if(this.initialResourcesFetched && this.initialDataFetched){
+            clearInterval(this.interval);
+            this.progressbar.fillRange = 100;
+            this.progressbar.node.active = false;
+            this.progressbarBg.node.active = false;
+            this.playButton.active = true;
+        }
     }
 
 
@@ -115,9 +127,9 @@ export class LandingScene extends Component {
             // this.RewardID = val.RewardID;
             // this.RewardLevel = val.RewardLevel;
             // this.RewardText = val.RewardText;
-
+            gameManager.getInstance().setCoins(val.CurrentScore);
             
-
+            this.initialDataFetched = true;
           }).catch((err:any) => {
             console.log('onGameStart executed: ' + err);
           }).finally(() => {

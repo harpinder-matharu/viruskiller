@@ -8,6 +8,8 @@ export class ChooseInjection extends Component {
 
     _delagateScript: Component | undefined;
 
+    injectionPrice :Array<number> = [100,200,300,400,500,600,700,800,900];
+
     start () {
         gameManager.getInstance().setSceneType(SCENE_TYPE.SYRINGE_SELECTION); 
     }
@@ -19,16 +21,31 @@ export class ChooseInjection extends Component {
     }
 
     onInjectionButton(event:any,  customEventData:any){
-        console.log(event, customEventData);
-        let syringeType:SYRINGE_TYPE = parseInt(customEventData);
 
+        let coins:number = gameManager.getInstance().getCoins();
+        let injectionPrice:number = this.injectionPrice[parseInt(customEventData)-1] ;
 
-        gameManager.getInstance().setSyringeType(syringeType);
-        this._delagateScript!.updateSyringeType();
-        this.node.active =false;
+        if(injectionPrice< coins){
+            console.log(event, customEventData);
+            let syringeType:SYRINGE_TYPE = parseInt(customEventData);
+            gameManager.getInstance().setSyringeType(syringeType);
+
+            gameManager.getInstance().setCoins(coins - injectionPrice);
+            this._delagateScript!.updateSyringeType(false,"",injectionPrice);
+            this.node.active =false;
+        }
+        else{
+            this._delagateScript!.updateSyringeType(true,"No Enough Coins to change chnage injeciton!",0);
+        }
+        
     }
 
     onCloseButton(){
         this.node.active = false;
+    }
+
+    updateCoins(){
+        let coins:number = gameManager.getInstance().getCoins();
+        this.totalCoins.string = coins.toString();
     }
 }

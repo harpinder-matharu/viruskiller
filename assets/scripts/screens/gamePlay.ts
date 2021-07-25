@@ -14,7 +14,10 @@ export class GamePlay extends Component {
     canAccessArrow :Boolean = false;
     bonusLevel :Boolean = false;
     enableAPIs :Boolean = false;
+    initialDataFetched :Boolean = false;
     coinMultiplyFactor:number=0;
+
+
 
     level:number = 1;
     levelCount:number = 1;
@@ -32,6 +35,8 @@ export class GamePlay extends Component {
     virusesDistroyedInOneShot:number = 0;
     xDifference:number = 0;
     yDifference:number = 0;
+
+    selectInjectionScript:any;
 
     levelData :any;
     virus:Node  = null!;
@@ -104,8 +109,8 @@ export class GamePlay extends Component {
         this.selectInjection.active =false;
         this.redBg.active = false
 
-        let selectInjectionScript:any = this.selectInjection.getComponent("ChooseInjection");
-        selectInjectionScript!.setDelegate(this);
+        this.selectInjectionScript = this.selectInjection.getComponent("ChooseInjection");
+        this.selectInjectionScript!.setDelegate(this);
         
         this.touchEvents();
         this.setVirusInfo();
@@ -120,7 +125,7 @@ export class GamePlay extends Component {
 
     startLevel(levelNum:number){
 
-
+        this.updateRewardLevelProgressBar();
         if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
             if(Math.floor(Math.random() * 2))
                 this.bonusLevel = true;
@@ -155,7 +160,6 @@ export class GamePlay extends Component {
         }
 
         this.schedule(this.checkCollision, 0.001);
-        // console.log("Syringe Type : "+gameManager.getInstance().getSyringeType());
     }
 
     startBonusLevel(){
@@ -175,15 +179,37 @@ export class GamePlay extends Component {
         this.showMessage("Bonus Level!");
         this.schedule(this.checkCollision, 0.001);
     }
+    updateRewardLevelProgressBar(){
 
-    updateSyringeType(){ 
-        this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
-        this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
-        this.setUpInitialSyringe();
+        this.RewardLevel = gameManager.getInstance().getRewardDetails().RewardLevel;
 
-        if(this.bonusLevel){
-            this.injectionCount.removeAllChildren();
-            this.setInjectionCount();
+        if(this.initialDataFetched){
+            let percent = 1 - (this.RewardLevel - this.levelCount)/this.RewardLevel;
+
+            console.log({percent});
+            console.log("rewardLevel:",this.RewardLevel);
+            console.log("levelCount:",this.levelCount);
+            this.progressbar.fillRange = percent;
+        }
+    }
+
+    updateSyringeType(error:boolean,msg:string,amount:number){
+        
+        if(!error){
+
+            this.APIObject.onPurchase(amount);
+            this.levelScore.string = gameManager.getInstance().getCoins().toString();
+            this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
+            this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
+            this.setUpInitialSyringe();
+
+            if(this.bonusLevel){
+                this.injectionCount.removeAllChildren();
+                this.setInjectionCount();
+            }
+        }
+        else{
+            this.showMessage(msg);
         }
     }
 
@@ -249,8 +275,9 @@ export class GamePlay extends Component {
         //size of virus
         let scale = this.rotator.getComponent(UITransform)?.contentSize.height!  * this.levelData.scale/this.virus.getComponent(UITransform)?.contentSize.height!;
         this.totalLevelPoints = 0;
-        this.progressbar.fillRange = 0;
-        this.levelScore.string = "0";
+        // this.progressbar.fillRange = 0;
+        this.levelScore.string = gameManager.getInstance().getCoins().toString();
+
 
         let BonusVirusType:VIRUS_TYPE = VIRUS_TYPE.NONE;
         if(this.bonusLevel){
@@ -317,7 +344,6 @@ export class GamePlay extends Component {
         });
 
         this.totalLevelPoints = this.totalLevelPoints * this.coinMultiplyFactor;
-        // console.log("Points "+this.totalLevelPoints);
     }
 
     updateLevelNum(){
@@ -341,7 +367,6 @@ export class GamePlay extends Component {
         this.injectionCount.getComponent(UITransform)?.setContentSize(new Size(width,height)); 
 
         for(let i=1;i<this.injectionsLeft;i++){
-            console.log("Adding injection");
             spareArrow = instantiate(this.arrowPrefab);
             spareArrow.getComponent(UITransform)!.setAnchorPoint(new Vec2(0,0));
             spareArrow.setScale(new Vec3(scale,scale,scale));
@@ -379,10 +404,8 @@ export class GamePlay extends Component {
 
     checkCollision(){
         if(this.virusArray.length>0){
-            //console.log("Check 0");
             this.virusArray.forEach((virusData,index,aar) =>{
                 if (this.checkArrowIntersectWith(virusData.virus)){
-                    // console.log("Collision");
                     this.virusesDistroyedInOneShot++;
                     SoundManager.getInstance().playSoundEffect(this.blast);
                     this.breakAndBurnVirus(virusData);
@@ -392,7 +415,6 @@ export class GamePlay extends Component {
             });
         }
         else{
-            //console.log("Check 1");
             this.unschedule(this.checkCollision);
             this.updateGameWinLayer();
             this.confettieAnimation.node.active = true;
@@ -443,7 +465,6 @@ export class GamePlay extends Component {
         }
         this.stopConfettie();
         this.gameOverLayer.node.active = false;
-        // console.log("Level Complete, Move to next Level");
         this.resetScene();
         this.level++;
         this.levelCount++
@@ -457,10 +478,10 @@ export class GamePlay extends Component {
 
     updateGameWinLayer(){
 
-        //console.log("Check 2");
+        let totalCoins = gameManager.getInstance().getCoins();
 
         if(this.enableAPIs){
-            this.onLevelComplete(this.levelCount,parseInt(this.levelScore.string));
+            this.onLevelComplete(this.levelCount,totalCoins);
         }
         
 
@@ -468,7 +489,7 @@ export class GamePlay extends Component {
         levelNumber.string = String("LEVEL "+this.levelCount);
 
         let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
-        scoreValue.string = String(this.levelScore.string);
+        scoreValue.string = totalCoins.toString();
 
         let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
         reviveButton.active = false;
@@ -487,7 +508,7 @@ export class GamePlay extends Component {
     updateGameOverLayer(){
           
         if(this.enableAPIs){
-            this.onGameOver(this.levelCount,parseInt(this.levelScore.string));
+            this.onGameOver(this.levelCount,gameManager.getInstance().getCoins());
         }
         
 
@@ -495,7 +516,7 @@ export class GamePlay extends Component {
         levelNumber.string = String("LEVEL "+this.levelCount);
 
         let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
-        scoreValue.string = String(this.levelScore.string);
+        scoreValue.string = gameManager.getInstance().getCoins().toString();
 
         let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
         reviveButton.active = true;
@@ -549,15 +570,12 @@ export class GamePlay extends Component {
                     star = star3;
                     
                 }
-                // console.log("animation played ",star);
                 star.active = true;
                 star.angle = 0;
                 tween(star)
                 .to(0,{scale : new Vec3(4,4,4)})
                 .to(0.5,{angle : 360, scale : new Vec3(1,1,1)})
                 .start();
-
-                // star.getComponent(Animation)?.play();
                 starCount++;
             })
             .delay(0.5)
@@ -569,8 +587,13 @@ export class GamePlay extends Component {
     }
     breakAndBurnVirus(virusData:virus){
         let point:number = getVirusPoints(virusData.type!) * this.coinMultiplyFactor;
-        this.levelScore.string = String(parseInt(this.levelScore.string) + point);
-        this.progressbar.fillRange = this.progressbar.fillRange+ point/this.totalLevelPoints;
+
+        let updatedScore = gameManager.getInstance().getCoins()+point
+
+        gameManager.getInstance().setCoins(updatedScore);
+        
+        this.levelScore.string = updatedScore.toString();
+        // this.progressbar.fillRange = this.progressbar.fillRange+ point/this.totalLevelPoints;
 
         let Position = this.rotator.getComponent(UITransform)?.convertToWorldSpaceAR(virusData.virus.position);
         Position = this.bg.getComponent(UITransform)?.convertToNodeSpaceAR(Position!);
@@ -672,7 +695,6 @@ export class GamePlay extends Component {
             }
             this.virusesDistroyedInOneShot = 0;  
             this.arrowTouchBeganPoint = eventLocation;
-            // console.log("Arrow Touched");
             this.canAccessArrow = true;
         }   
     }
@@ -718,7 +740,6 @@ export class GamePlay extends Component {
                     }
                 }
 
-                console.log(`MISS : ${this.miss}, Collisions : ${this.virusesDistroyedInOneShot}`);
                 
                 if(this.bonusLevel){
                     this.injectionsLeft--;
@@ -799,9 +820,6 @@ export class GamePlay extends Component {
         .delay(0.1).union().repeat(coinsCount).start();
     }
     onRewardButton(event:any,  customEventData:any){
-        // console.log(event, customEventData);
-        // console.log(event.target);
-
         if(customEventData!="close"){
             let touchRestriction:any = this.rewardLayer.node!.getChildByName("touchRestriction");
             touchRestriction.active = true;
@@ -838,6 +856,7 @@ export class GamePlay extends Component {
         }
     }
     onSyringeButton(){
+        this.selectInjectionScript.updateCoins();
         this.selectInjection.active = true;
     }
     showMessage(message: string){
@@ -873,20 +892,17 @@ export class GamePlay extends Component {
     onGameStart(){
         let prom1 =  this.APIObject.onGameStart();
         prom1.then((val:any)=> {
+            this.initialDataFetched = true;
             console.log('onGameStart executed: ');
-            console.log(val);
-
-            // this.RewardID = val.RewardID;
-            // this.RewardLevel = val.RewardLevel;
-            // this.RewardText = val.RewardText;
             gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
-
+            gameManager.getInstance().setCoins(val.CurrentScore);
+            this.selectInjectionScript.updateCoins();
             console.log(val.RewardID,val.RewardLevel,val.RewardText);
-
+            this.updateRewardLevelProgressBar();
           }).catch((err:any) => {
             console.log('onGameStart executed: ' + err);
           }).finally(() => {
-            console.log('onGameStart done executing');
+            console.log('');
           });
     }
 
@@ -895,10 +911,6 @@ export class GamePlay extends Component {
         prom3.then((val:any)=> {
             console.log('onCompleteReward executed: ');
             console.log(val);
-
-            // this.RewardID = val.RewardID;
-            // this.RewardLevel = val.RewardLevel;
-            // this.RewardText = val.RewardText;
             gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
 
             console.log(val.RewardID,val.RewardLevel,val.RewardText);
@@ -906,7 +918,7 @@ export class GamePlay extends Component {
         }).catch((err:any) => {
             console.log('onCompleteReward executed: ' + err);
         }).finally(() => {
-            console.log('onCompleteReward done executing');
+            console.log('');
         });
     }
 
@@ -915,16 +927,13 @@ export class GamePlay extends Component {
         prom5.then((val:any)=> {
             console.log('onGameRevive executed: ');
             console.log(val);
-            // this.RewardID = val.RewardID;
-            // this.RewardLevel = val.RewardLevel;
-            // this.RewardText = val.RewardText;
             gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
 
             console.log(val.RewardID,val.RewardLevel,val.RewardText);
         }).catch((err:any) => {
             console.log('onGameRevive executed: ' + err);
         }).finally(() => {
-            console.log('onGameRevive done executing');
+            console.log('');
         });
     }
     

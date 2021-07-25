@@ -69,11 +69,9 @@ export class gameManager{
         this.rewardDetails.RewardID = RewardID;
         this.rewardDetails.RewardLevel = RewardLevel;
         this.rewardDetails.RewardText = RewardText;
-        console.log("yoyoy :",JSON.stringify(this.rewardDetails));
     }
 
     getRewardDetails(){
-        console.log(JSON.stringify(this.rewardDetails));
         return this.rewardDetails;
     }
 
