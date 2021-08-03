@@ -30,12 +30,22 @@ export class LandingScene extends Component {
 
     start () {
 
-        if(gameManager.getInstance().getToken()){
+
+        
+        if(gameManager.getInstance().getToken()&& gameManager.getInstance().isWebBuild){
             this.enableAPIs = true;
         }
+        else{
+            this.initialDataFetched = true;
+        }
         if(this.enableAPIs){
-            this.initBlaashGameSDK();
-            this.onGameStart();
+            try {
+                this.initBlaashGameSDK();
+                this.onGameStart();
+            } catch (error) {
+                console.log("Token error");
+                this.initialDataFetched = true;
+            }
         }
 
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
@@ -61,11 +71,11 @@ export class LandingScene extends Component {
             this.currentGame.active = false;
             this.node.addChild( this.currentGame);
 
-            let clip = ResourceUtils.getInstance().getGameResources("virusKiller", "music");
-            if(clip){
-                this.node.getComponent(AudioSource)!.clip = clip;
-                SoundManager.getInstance().playMusic(true);
-            }
+            // let clip = ResourceUtils.getInstance().getGameResources("virusKiller", "music");
+            // if(clip){
+            //     this.node.getComponent(AudioSource)!.clip = clip;
+            //     SoundManager.getInstance().playMusic(true);
+            // }
             
             this.initialResourcesFetched = true;
         
@@ -96,7 +106,12 @@ export class LandingScene extends Component {
         this.settingLayer.active = false;
 
         if(this.music.isChecked){
-            SoundManager.getInstance().stopMusic();
+            // SoundManager.getInstance().stopMusic();
+            this.node.getComponent(AudioSource)?.stop();
+        }
+        else{
+            // SoundManager.getInstance().stopMusic();
+            this.node.getComponent(AudioSource)?.play();
         }
     }
 

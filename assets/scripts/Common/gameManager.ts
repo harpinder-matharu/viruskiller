@@ -37,6 +37,7 @@ export class gameManager{
 
     music : boolean = true;
     sound : boolean = true;
+    isWebBuild : boolean = true;
 
     gameManager(){
         this.sceneType = SCENE_TYPE.NONE;

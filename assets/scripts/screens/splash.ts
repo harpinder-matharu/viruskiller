@@ -13,15 +13,19 @@ export class SplashScreen extends Component {
 
     start () {
         
-        var parameters  =   new URL(window.location.toString()).searchParams;
-        var token       =   parameters.get("token");
-        if(token){
-            gameManager.getInstance().setToken(token!);
+        if(gameManager.getInstance().isWebBuild){
+            var parameters  =   new URL(window.location.toString()).searchParams;
+            var token       =   parameters.get("token");
+            console.log({token});
+            if(token){
+                console.log("check 1");
+                gameManager.getInstance().setToken(token!);
+            }
+            else{
+                console.log("check 2");
+                gameManager.getInstance().setToken("LVAOHCHurk35bb1f0b844b493199316b6b2e8b7dc5jfvVfOe3bm5oEvY9yn0Ar9FUPLAvpMzu7HPb8XRwTENANT1234lkjhiuhhnj");
+            }
         }
-        else{
-            gameManager.getInstance().setToken("hfhdksiuaHb7a677693d2d4e69aafe5c6ee1b2b596en41EEQr7k2ENjdSM3rbz1col21F3Lrw9XEgmhkD5245665499");
-        }
-
 
         
         tween(this.gameName)

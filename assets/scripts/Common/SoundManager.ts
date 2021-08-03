@@ -50,7 +50,7 @@ export class SoundManager{
     }
 
     stopMusic(){
-        this._audioSource.stop();
+        this._audioSource.pause();
     }
 
 

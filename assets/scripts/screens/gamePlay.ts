@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator;
 import {VIRUS_TYPE, getLevelData,visurInfo,virus,getVirusPower,getVirusPoints,getVirusAnimationName,getVirusDestroyAnimationName} from '../Common/virusData';
 import { SoundManager } from '../Common/SoundManager';
 
-// <script src="https://game-connector.s3.ap-south-1.amazonaws.com/BlaashGameSDK.js"> </script> </script>
+// <script src="https://game-connector.s3.ap-south-1.amazonaws.com/BlaashGameSDK.js"> </script>
 
 @ccclass('GamePlay')
 export class GamePlay extends Component {
@@ -59,6 +59,13 @@ export class GamePlay extends Component {
     @property(Node)     selectInjection :Node = null!;
     @property(Node)     toggleInjections :Node = null!;
     @property(Node)     redBg :Node = null!;
+
+    @property(Node)     bonusLevelBg :Node = null!;
+    @property(Node)     bonusLevelHeading :Node = null!;
+    @property(Node)     bonusLevelGreetings  :Node = null!;
+    @property(Node)     replayButton  :Node = null!;
+    @property(Node)     gameTouchRestriction  :Node = null!;
+
     @property(Sprite)    bg :Sprite = null!;
     @property(Sprite)    bonfire :Sprite = null!;
     @property(Sprite)    rotator :Sprite = null!;
@@ -92,12 +99,23 @@ export class GamePlay extends Component {
 
     start () {
         
-        if(gameManager.getInstance().getToken()){
+        this.gameTouchRestriction.active=false;
+
+        if(gameManager.getInstance().getToken()&& gameManager.getInstance().isWebBuild){
             this.enableAPIs = true;
         }
+        if(!gameManager.getInstance().isWebBuild){
+            this.admobInit();
+        }
 
-        if(this.enableAPIs){
-            this.initBlaashGameSDK();
+        if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
+
+            try {
+                this.initBlaashGameSDK();
+                this.onGameStart();
+            } catch (error) {
+                console.log("Token error");
+            }
         }
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
         this.gameOverLayer.node.active = false;
@@ -116,9 +134,9 @@ export class GamePlay extends Component {
         this.setVirusInfo();
         this.startLevel(this.level);
         this.createCoins();
-        if(this.enableAPIs){
-            this.onGameStart();
-        }
+        // if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
+        //     this.onGameStart();
+        // }
 
         this.bonfire.getComponent(Animation)?.play();
     }
@@ -127,12 +145,18 @@ export class GamePlay extends Component {
 
         this.updateRewardLevelProgressBar();
         if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
-            if(Math.floor(Math.random() * 2))
+            
+            // this.setInjectionCount();
+            this.updateUIForBonusLevel();
+            this.showBonusLevelGreetings();
+            if(Math.floor(Math.random() * 2)){
                 this.bonusLevel = true;
+            }
+                
+        }else{
+            this.updateUIForSimpleLevel();
+            this.showMessage("Kill Them All!");
         }
-        // else{
-        //     this.bonusLevel = false;
-        // }
 
         this.miss = 0;
         this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
@@ -151,15 +175,44 @@ export class GamePlay extends Component {
         this.rotateRotator();
         this.enableAllToggleInjections();
         
-        if(this.bonusLevel){
-            this.setInjectionCount();
-            this.showMessage("Bonus Level!");
-        }
-        else{
-            this.showMessage("Kill Them All!");
-        }
+        // console.log("Bonus Level : ",this.bonusLevel);
+        // if(this.bonusLevel){
+        //     this.setInjectionCount();
+        //     this.updateUIForBonusLevel();
+        //     this.showBonusLevelGreetings();
+        // }
+        // else{
+        //     this.updateUIForSimpleLevel();
+        //     this.showMessage("Kill Them All!");
+        // }
 
         this.schedule(this.checkCollision, 0.001);
+    }
+
+    updateUIForBonusLevel(){
+        this.bonusLevelBg.active = true;    
+        this.bonusLevelHeading.active = true;
+        this.bonusLevelGreetings.active = true;
+        this.replayButton.active = false;
+    }
+
+    showBonusLevelGreetings(){
+        tween(this.bonusLevelGreetings)
+        .call(()=>{
+            this.bonusLevelGreetings.active = true;
+        })
+        .delay(1)
+        .call(()=>{
+            this.bonusLevelGreetings.active = false;
+        })
+        .start();
+    }
+
+    updateUIForSimpleLevel(){
+        this.bonusLevelBg.active = false;    
+        this.bonusLevelHeading.active = false;
+        this.bonusLevelGreetings.active = false;
+        this.replayButton.active = true;
     }
 
     startBonusLevel(){
@@ -197,16 +250,16 @@ export class GamePlay extends Component {
         
         if(!error){
 
-            this.APIObject.onPurchase(amount);
+            this.APIObject.onPurchase(this.levelCount,gameManager.getInstance().getCoins(),amount);
             this.levelScore.string = gameManager.getInstance().getCoins().toString();
             this.coinMultiplyFactor = gameManager.getInstance().getSyringeType();
             this.arrowPrefab = this.syringes[this.syringesType.indexOf(this.coinMultiplyFactor)];
             this.setUpInitialSyringe();
 
-            if(this.bonusLevel){
-                this.injectionCount.removeAllChildren();
-                this.setInjectionCount();
-            }
+            // if(this.bonusLevel){
+            //     this.injectionCount.removeAllChildren();
+            //     this.setInjectionCount();
+            // }
         }
         else{
             this.showMessage(msg);
@@ -421,48 +474,28 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.levelCount){
+            // if(gameManager.getInstance().getRewardDetails().RewardLevel == this.levelCount){
                 
-                if(Math.floor(Math.random() * 2) == 1){
-                    this.rewardLayer.node.active = true;
-                } 
-                else{
-                    tween(this.bg)
-                    .call(()=>{
-                        this.cuponDiscount.string = gameManager.getInstance().getRewardDetails().RewardText;
-                        if(this.enableAPIs){
-                            this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
-                        }
-                        
-
-                        this.congratulationLayer.node.active = true;
-                        this.congratulationLayer.node.getChildByName('GiftBox')!.getComponent(Animation)?.play();
-                        this.congratulationLayer.node.getChildByName('Cupon')!.getComponent(Animation)?.play();
-                        this.congratulationLayer.node.getChildByName('text')!.getComponent(Animation)?.play();
-                    })
-                    .delay(6)
-                    .call(()=>{
-                        this.congratulationLayer.node.active = false;
-                        this.congratulationLayer.node.getChildByName('text')!.getComponent(Animation)?.stop();
-    
-                        this.showStarAnimation();
-                    })
-                    .start();
-                }
-            }
-            else{
-                this.showStarAnimation();
-            }
+            //     if(Math.floor(Math.random() * 2) == 1){
+            //         this.rewardLayer.node.active = true;
+            //     } 
+            //     else{
+                    this.congratulationLayer.node.active = true;
+            //     }
+            // }
+            // else{
+            //     this.showStarAnimation();
+            // }
         }
     }
 
     onNext(){
 
-        if(this.bonusLevel){
+        // if(this.bonusLevel){
 
-            this.bonusLevel = false;
-            this.injectionCount.removeAllChildren();
-        }
+        //     this.bonusLevel = false;
+        //     this.injectionCount.removeAllChildren();
+        // }
         this.stopConfettie();
         this.gameOverLayer.node.active = false;
         this.resetScene();
@@ -480,7 +513,7 @@ export class GamePlay extends Component {
 
         let totalCoins = gameManager.getInstance().getCoins();
 
-        if(this.enableAPIs){
+        if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
             this.onLevelComplete(this.levelCount,totalCoins);
         }
         
@@ -499,34 +532,62 @@ export class GamePlay extends Component {
 
         this.gameOverLayer.node.active = true;
 
-        if(this.bonusLevel){
+        // if(this.bonusLevel){
 
-        //     this.bonusLevel = false;
-            this.injectionCount.removeAllChildren();
-        }
+        // //     this.bonusLevel = false;
+        //     this.injectionCount.removeAllChildren();
+        // }
     }
     updateGameOverLayer(){
           
-        if(this.enableAPIs){
+        if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
             this.onGameOver(this.levelCount,gameManager.getInstance().getCoins());
         }
         
+        
 
-        let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
-        levelNumber.string = String("LEVEL "+this.levelCount);
+        tween(this.bg)
+        .call(()=>{
+            this.gameTouchRestriction.active=true;
 
-        let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
-        scoreValue.string = gameManager.getInstance().getCoins().toString();
+            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
+                this.showMessage("Keep Playing to Win Exciting Rewards!");
+            }
+            else{
+                this.showMessage("Game Over!");
+            }
+            
+        })
+        .delay(1.4)
+        .call(()=>{
+            this.gameTouchRestriction.active=false;
+            let levelNumber:Label|any = this.gameOverLayer.node.getChildByName("level")?.getComponent(Label);
+            levelNumber.string = String("LEVEL "+this.levelCount);
 
-        let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
-        reviveButton.active = true;
+            let scoreValue:Label|any = this.gameOverLayer.node.getChildByName("scoreValue")?.getComponent(Label);
+            
 
-        let nextButton:Button|any = this.gameOverLayer.node.getChildByName("next");
-        nextButton.active = false;
+            let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
+            
+            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
+                reviveButton.active = false;
+                scoreValue.string = "";
+            }
+            else{
+                reviveButton.active = false;
+                scoreValue.string = gameManager.getInstance().getCoins().toString();
+            }
 
-        this.gameOverLayer.node.active = true;
+            let nextButton:Button|any = this.gameOverLayer.node.getChildByName("next");
+            nextButton.active = false;
 
-        this.dontShowStars();
+            this.gameOverLayer.node.active = true;
+
+            this.dontShowStars();
+        })
+        .start();
+
+        
     }
 
     dontShowStars(){
@@ -551,9 +612,9 @@ export class GamePlay extends Component {
         let star:Node|any = star1;
 
         let repeatNum = 3 - this.miss;
-        if(this.bonusLevel){
-            repeatNum = this.injectionsLeft + 1;
-        }
+        // if(this.bonusLevel){
+        //     repeatNum = this.injectionsLeft + 1;
+        // }
         
         let starCount = 1;
 
@@ -741,29 +802,27 @@ export class GamePlay extends Component {
                 }
 
                 
-                if(this.bonusLevel){
-                    this.injectionsLeft--;
-                    if(this.injectionsLeft>0){
-                        this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
-                        this.resetSyringePosition();
-                    }else{
-                        // gameOver
-                        if(this.virusArray.length!=0)
-                            this.updateGameOverLayer();
-                    }
+                // if(this.bonusLevel){
+                //     this.injectionsLeft--;
+                //     if(this.injectionsLeft>0){
+                //         this.injectionCount.getChildByName(String(this.injectionsLeft))?.removeFromParent();
+                //         this.resetSyringePosition();
+                //     }else{
+                //         // gameOver
+                //         if(this.virusArray.length!=0)
+                //             this.updateGameOverLayer();
+                //     }
 
-                }
-                else{
+                // }
+                // else{
                     if(this.miss ==3){
                         if(this.virusArray.length!=0)
                             this.updateGameOverLayer();
                     }
                     else{
                         this.resetSyringePosition();
-                    }
-    
-                    
-                }
+                    }  
+                // }
             })
             .start();
             this.canAccessArrow = false;
@@ -778,23 +837,47 @@ export class GamePlay extends Component {
     }
     onGoToHome(){
         this.node.active = false;
+        if(this.bonusLevel){
+
+            this.bonusLevel = false;
+            // this.injectionCount.removeAllChildren();
+        }
+        this.stopConfettie();
+        this.gameOverLayer.node.active = false;
+        this.resetScene();
+        this.level=1;
+        this.levelCount=1;
+        this.startLevel(this.level);
         // director.loadScene("landingScene");
     }
     onRevive(){
-        if(this.enableAPIs){
+        if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
             this.onGameRevive();
         }
+
+
+        if(!gameManager.getInstance().isWebBuild){
+            //show ad
+        }
+        else{
+            this.reviveMe();
+        }
         
+        
+    }
+
+    reviveMe(){
         this.miss = 0;
         this.gameOverLayer.node.active = false;
         this.arrow.removeFromParent();
         this.setUpInitialSyringe();
         this.enableAllToggleInjections();
-        if(this.bonusLevel){
-            this.injectionCount.removeAllChildren();
-            this.setInjectionCount();
-        }
+        // if(this.bonusLevel){
+        //     this.injectionCount.removeAllChildren();
+        //     this.setInjectionCount();
+        // }
     }
+
     createCoins(){
         for(let i = 0;i<100;i++){
             let coin = instantiate(this.prefabCoin);
@@ -834,7 +917,7 @@ export class GamePlay extends Component {
 
             this.rewardBox.getChildByName('text')!.getComponent(Animation)?.play();
 
-            if(this.enableAPIs){
+            if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
                 this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
             }
             
@@ -855,6 +938,29 @@ export class GamePlay extends Component {
             this.showStarAnimation();
         }
     }
+
+    onSingleBoxTouch(){
+            if(this.enableAPIs&& gameManager.getInstance().isWebBuild){
+                this.onCompleteReward(gameManager.getInstance().getRewardDetails().RewardID);
+            }
+            this.congratulationLayer.node.getChildByName('GiftBox')!.active = false;
+            this.rewardBox = instantiate(this.giftBox);
+            this.congratulationLayer.node.addChild(this.rewardBox);
+            this.rewardBox.setPosition(new Vec3(0,0,0));
+            this.rewardBox.getComponent("GiftBox")!.playAnimation(gameManager.getInstance().getRewardDetails().RewardText);
+    }
+
+    onSingleBoxClose(){
+
+        if(this.rewardBox){
+            this.rewardBox.removeFromParent();
+            this.rewardBox = null!;
+        }
+        this.congratulationLayer.node.getChildByName('GiftBox')!.active = true;
+        this.congratulationLayer.node.active = false;
+        this.showStarAnimation();
+    }
+
     onSyringeButton(){
         this.selectInjectionScript.updateCoins();
         this.selectInjection.active = true;
@@ -923,18 +1029,18 @@ export class GamePlay extends Component {
     }
 
     onGameRevive(){
-        let prom5 =  this.APIObject.onGameRevive();
-        prom5.then((val:any)=> {
-            console.log('onGameRevive executed: ');
-            console.log(val);
-            gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
+        this.APIObject.onGameRevive();
+        // prom5.then((val:any)=> {
+        //     console.log('onGameRevive executed: ');
+        //     console.log(val);
+            // gameManager.getInstance().setRewardDetails(val.RewardID, val.RewardLevel, val.RewardText);
 
-            console.log(val.RewardID,val.RewardLevel,val.RewardText);
-        }).catch((err:any) => {
-            console.log('onGameRevive executed: ' + err);
-        }).finally(() => {
-            console.log('');
-        });
+            // console.log(val.RewardID,val.RewardLevel,val.RewardText);
+        // }).catch((err:any) => {
+        //     console.log('onGameRevive executed: ' + err);
+        // }).finally(() => {
+        //     console.log('');
+        // });
     }
     
     onLevelComplete(level:number,score:number){
@@ -947,7 +1053,46 @@ export class GamePlay extends Component {
         this.APIObject.onGameOver(level, score);
     }
 
-    onPurchase(amount:number){
-        this.APIObject.onPurchase(amount);
+    onPurchase(score:number,amount:number){
+        this.APIObject.onPurchase(score,amount);
+    }
+
+    //Ad methods for google play
+
+    admobInit() {
+        var self = this;
+            sdkbox.PluginAdMob.setListener({
+                adViewDidReceiveAd: function(name:any) {
+                    self.showInfo('adViewDidReceiveAd name=' + name);
+                },
+                adViewDidFailToReceiveAdWithError: function(name:any, msg:any) {
+                    self.showInfo('adViewDidFailToReceiveAdWithError name=' + name + ' msg=' + msg);
+                },
+                adViewWillPresentScreen: function(name:any) {
+                    self.showInfo('adViewWillPresentScreen name=' + name);
+                },
+                adViewDidDismissScreen: function(name:any) {
+                    self.showInfo('adViewDidDismissScreen name=' + name);
+                },
+                adViewWillDismissScreen: function(name:any) {
+                    self.showInfo('adViewWillDismissScreen=' + name);
+                },
+                adViewWillLeaveApplication: function(name:any) {
+                    self.showInfo('adViewWillLeaveApplication=' + name);
+                }
+            });
+            sdkbox.PluginAdMob.init();
+    }
+
+    cacheInterstitial() {
+        sdkbox.PluginAdMob.cache('reward');
+    }
+
+    showInterstitial() {
+        sdkbox.PluginAdMob.show('reward');
+    }
+
+    showInfo(msg:string){
+        console.log(msg);
     }
 }
