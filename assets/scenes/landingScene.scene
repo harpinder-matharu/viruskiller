@@ -29,7 +29,7 @@
     "_prefab": null,
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 119
+      "__id__": 120
     },
     "_id": "45a686a5-5a57-45e5-97d3-add0c7a8af3b"
   },
@@ -209,19 +209,19 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 111
+        "__id__": 112
       },
       {
-        "__id__": 113
+        "__id__": 114
       },
       {
-        "__id__": 115
-      },
-      {
-        "__id__": 117
+        "__id__": 116
       },
       {
         "__id__": 118
+      },
+      {
+        "__id__": 119
       }
     ],
     "_prefab": null,
@@ -370,13 +370,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 106
+        "__id__": 107
       },
       {
-        "__id__": 108
+        "__id__": 109
       },
       {
-        "__id__": 110
+        "__id__": 111
       }
     ],
     "_prefab": null,
@@ -1547,19 +1547,19 @@
         "__id__": 73
       },
       {
-        "__id__": 85
+        "__id__": 86
       },
       {
-        "__id__": 90
+        "__id__": 91
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 102
+        "__id__": 103
       },
       {
-        "__id__": 104
+        "__id__": 105
       }
     ],
     "_prefab": null,
@@ -2276,7 +2276,11 @@
     "__prefab": {
       "__id__": 84
     },
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 85
+      }
+    ],
     "_interactable": true,
     "_transition": 0,
     "_normalColor": {
@@ -2331,6 +2335,16 @@
     "fileId": "58GFHdMmJFBa4quSrrbzsk"
   },
   {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 7
+    },
+    "component": "",
+    "_componentId": "14f313hrqRPqJSWMOf8WtV2",
+    "handler": "musicButton",
+    "customEventData": ""
+  },
+  {
     "__type__": "cc.Node",
     "_name": "soundLabel",
     "_objFlags": 0,
@@ -2341,10 +2355,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 86
+        "__id__": 87
       },
       {
-        "__id__": 88
+        "__id__": 89
       }
     ],
     "_prefab": null,
@@ -2381,11 +2395,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 85
+      "__id__": 86
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 87
+      "__id__": 88
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2408,11 +2422,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 85
+      "__id__": 86
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 89
+      "__id__": 90
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -2457,19 +2471,19 @@
     },
     "_children": [
       {
-        "__id__": 91
+        "__id__": 92
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 96
+        "__id__": 97
       },
       {
-        "__id__": 98
+        "__id__": 99
       },
       {
-        "__id__": 100
+        "__id__": 101
       }
     ],
     "_prefab": null,
@@ -2506,16 +2520,16 @@
     "_name": "Checkmark",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 90
+      "__id__": 91
     },
     "_children": [],
     "_active": false,
     "_components": [
       {
-        "__id__": 92
+        "__id__": 93
       },
       {
-        "__id__": 94
+        "__id__": 95
       }
     ],
     "_prefab": null,
@@ -2552,11 +2566,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 91
+      "__id__": 92
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 93
+      "__id__": 94
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2579,11 +2593,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 91
+      "__id__": 92
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 95
+      "__id__": 96
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -2624,11 +2638,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 90
+      "__id__": 91
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 97
+      "__id__": 98
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2651,11 +2665,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 90
+      "__id__": 91
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 99
+      "__id__": 100
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -2696,11 +2710,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 90
+      "__id__": 91
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 101
+      "__id__": 102
     },
     "clickEvents": [],
     "_interactable": true,
@@ -2743,12 +2757,12 @@
     "_duration": 0.1,
     "_zoomScale": 1.2,
     "_target": {
-      "__id__": 90
+      "__id__": 91
     },
     "checkEvents": [],
     "_isChecked": false,
     "_checkMark": {
-      "__id__": 94
+      "__id__": 95
     },
     "_id": "8eZJh6LtFLpZqHPV4pyKe2"
   },
@@ -2765,7 +2779,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 103
+      "__id__": 104
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2792,7 +2806,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 105
+      "__id__": 106
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -2837,7 +2851,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 107
+      "__id__": 108
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2864,7 +2878,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 109
+      "__id__": 110
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -2938,7 +2952,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 112
+      "__id__": 113
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -2965,7 +2979,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 114
+      "__id__": 115
     },
     "_cameraComponent": {
       "__id__": 9
@@ -2986,7 +3000,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 116
+      "__id__": 117
     },
     "_alignFlags": 45,
     "_target": null,
@@ -3025,7 +3039,7 @@
       "__id__": 83
     },
     "sound": {
-      "__id__": 100
+      "__id__": 101
     },
     "progressbar": {
       "__id__": 40
@@ -3062,16 +3076,16 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 120
-    },
-    "shadows": {
       "__id__": 121
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 122
     },
-    "fog": {
+    "_skybox": {
       "__id__": 123
+    },
+    "fog": {
+      "__id__": 124
     }
   },
   {

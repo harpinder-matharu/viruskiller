@@ -64,6 +64,7 @@ export class GamePlay extends Component {
     @property(Node)     bonusLevelHeading :Node = null!;
     @property(Node)     bonusLevelGreetings  :Node = null!;
     @property(Node)     replayButton  :Node = null!;
+    @property(Node)     reviveButton  :Node = null!;
     @property(Node)     gameTouchRestriction  :Node = null!;
 
     @property(Sprite)    bg :Sprite = null!;
@@ -115,6 +116,7 @@ export class GamePlay extends Component {
                 this.onGameStart();
             } catch (error) {
                 console.log("Token error");
+                this.enableAPIs = false;
             }
         }
         SoundManager.getInstance().init(this.node.getComponent(AudioSource)!);
@@ -142,6 +144,12 @@ export class GamePlay extends Component {
     }
 
     startLevel(levelNum:number){
+
+        if(!gameManager.getInstance().isWebBuild){
+            this.reviveButton.getComponent(Button)!.interactable = false;
+            this.reviveButton.getComponent(Sprite)!.grayscale = true;
+            this.cacheInterstitial();
+        }
 
         this.updateRewardLevelProgressBar();
         if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
@@ -474,18 +482,17 @@ export class GamePlay extends Component {
             this.confettieAnimation.getComponent(Animation)?.play();
 
 
-            // if(gameManager.getInstance().getRewardDetails().RewardLevel == this.levelCount){
-                
-            //     if(Math.floor(Math.random() * 2) == 1){
-            //         this.rewardLayer.node.active = true;
-            //     } 
-            //     else{
+            if(gameManager.getInstance().getRewardDetails().RewardLevel == this.levelCount){
+                if(Math.floor(Math.random() * 2) == 1){
+                    this.rewardLayer.node.active = true;
+                } 
+                else{
                     this.congratulationLayer.node.active = true;
-            //     }
-            // }
-            // else{
-            //     this.showStarAnimation();
-            // }
+                }
+            }
+            else{
+                this.showStarAnimation();
+            }
         }
     }
 
@@ -568,18 +575,21 @@ export class GamePlay extends Component {
             
 
             let reviveButton:Button|any = this.gameOverLayer.node.getChildByName("revive");
+            let nextButton:Button|any = this.gameOverLayer.node.getChildByName("next");
             
+
             if(gameManager.getInstance().getRewardDetails().RewardLevel == this.level){
                 reviveButton.active = false;
+                nextButton.active = true;
                 scoreValue.string = "";
             }
             else{
-                reviveButton.active = false;
+                reviveButton.active = true;
+                nextButton.active = false;
                 scoreValue.string = gameManager.getInstance().getCoins().toString();
             }
 
-            let nextButton:Button|any = this.gameOverLayer.node.getChildByName("next");
-            nextButton.active = false;
+            
 
             this.gameOverLayer.node.active = true;
 
@@ -857,7 +867,9 @@ export class GamePlay extends Component {
 
 
         if(!gameManager.getInstance().isWebBuild){
-            //show ad
+            if(!gameManager.getInstance().isWebBuild){
+                this.showInterstitial();
+            }
         }
         else{
             this.reviveMe();
@@ -936,6 +948,8 @@ export class GamePlay extends Component {
 
             this.rewardLayer.node.active = false;
             this.showStarAnimation();
+
+            this.onNext();
         }
     }
 
@@ -959,6 +973,8 @@ export class GamePlay extends Component {
         this.congratulationLayer.node.getChildByName('GiftBox')!.active = true;
         this.congratulationLayer.node.active = false;
         this.showStarAnimation();
+
+        this.onNext();
     }
 
     onSyringeButton(){
@@ -1064,21 +1080,27 @@ export class GamePlay extends Component {
             sdkbox.PluginAdMob.setListener({
                 adViewDidReceiveAd: function(name:any) {
                     self.showInfo('adViewDidReceiveAd name=' + name);
+                    self.reviveButton.getComponent(Button)!.interactable = true;
+                    self.reviveButton.getComponent(Sprite)!.grayscale = false;
                 },
                 adViewDidFailToReceiveAdWithError: function(name:any, msg:any) {
                     self.showInfo('adViewDidFailToReceiveAdWithError name=' + name + ' msg=' + msg);
+                    self.cacheInterstitial();
                 },
                 adViewWillPresentScreen: function(name:any) {
                     self.showInfo('adViewWillPresentScreen name=' + name);
                 },
                 adViewDidDismissScreen: function(name:any) {
                     self.showInfo('adViewDidDismissScreen name=' + name);
+                    self.reviveMe();
                 },
                 adViewWillDismissScreen: function(name:any) {
                     self.showInfo('adViewWillDismissScreen=' + name);
+                    self.reviveMe();
                 },
                 adViewWillLeaveApplication: function(name:any) {
                     self.showInfo('adViewWillLeaveApplication=' + name);
+                    self.reviveMe();
                 }
             });
             sdkbox.PluginAdMob.init();

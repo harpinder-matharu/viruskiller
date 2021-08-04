@@ -32,17 +32,17 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 37
+        "__id__": 38
       },
       {
-        "__id__": 39
+        "__id__": 40
       },
       {
-        "__id__": 41
+        "__id__": 42
       }
     ],
     "_prefab": {
-      "__id__": 43
+      "__id__": 44
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -706,7 +706,7 @@
       }
     ],
     "_prefab": {
-      "__id__": 36
+      "__id__": 37
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -771,15 +771,17 @@
       "__id__": 32
     },
     "_enabled": true,
-    "__prefab": null,
+    "__prefab": {
+      "__id__": 36
+    },
     "_visFlags": 0,
     "_customMaterial": null,
     "_srcBlendFactor": 2,
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 51,
-      "g": 0,
+      "r": 255,
+      "g": 255,
       "b": 255,
       "a": 255
     },
@@ -805,6 +807,10 @@
     "_id": ""
   },
   {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "079IcW0QZMXI+IAbE7x19H"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -823,7 +829,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 38
+      "__id__": 39
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -850,7 +856,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 40
+      "__id__": 41
     },
     "_visFlags": 0,
     "_customMaterial": null,
@@ -892,7 +898,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 42
+      "__id__": 43
     },
     "cuponDiscount": {
       "__id__": 14
